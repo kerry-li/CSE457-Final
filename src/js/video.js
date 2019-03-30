@@ -13,24 +13,12 @@ class VideoCategory {
 
 class Video {
 
-	get category() {
-
-	}
-
-	get title() {
-
-	}
-
-	get views() {
-
-	}
-
-	get link() {
-
-	}
-
-	get author() {
-		
+	constructor(category, title, views, link, author) {
+		this.category = category;
+		this.title = title;
+		this.views = views;
+		this.link = link;
+		this.author = author;
 	}
 
 }
