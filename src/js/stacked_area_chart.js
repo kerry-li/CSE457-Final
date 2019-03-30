@@ -1,26 +1,20 @@
+var width = 600;
+var height = 600;
+
 class StackedAreaChart {
-	// let 
-	// let videos = [];
-	// const xMaxLength = 5;
-	// var xScale; 
-	// var yScale;
-	// var svg;
-	// var svgWidth;
-	// var svgHeight;
-	// var area;
-	constructor(width, height) {
-		this.points = [
-			{"Day": 1, "v1": 10, "v2": 20},
-			{"Day": 2, "v1": 15, "v2": 23},
-			{"Day": 3, "v1": 20, "v2": 30},
-			{"Day": 4, "v1": 15, "v2": 10},
-			{"Day": 5, "v1": 25, "v2": 15},
-		];
+	constructor(points) {
+		//margins for the graph
+		this.margin = { top: 20, right: 60, bottom: 200, left: 60 };
+		this.points = points;
 		this.svgWidth = width;
 		this.svgHeight = height;
-		this.svg = d3.select("body").append("svg").attr("width", width).attr("height", height)
-			// .append("g")
-		
+		this.svg = d3.select("#area-chart").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.append("g")
+			.transform("translate",  "translate(" + this.margin.left + "," + this.margin.top + ")")
+
+		// scales for the graph
 		this.xScale = d3.scaleLinear().domain([0, points.length]).range([0, svgWidth]);
 		this.yScale = d3.scaleLinear().domain([0,50]).range([0,svgHeight]);
 		updateVis();
