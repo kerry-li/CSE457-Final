@@ -5,3 +5,9 @@ VideoCategory.setCategoryMap({
   2: 'Entertainment',
   3: 'Education'
 });
+
+var numCategories = 4;
+
+var fakeData = generateFakeData(20, numCategories);
+console.log(fakeData)
+console.log(fakeData.map(video => video.category.toString()));
