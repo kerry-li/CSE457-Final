@@ -9,7 +9,7 @@ class ChartPoint {
 		var views = 0;
 		this.videos.forEach(video => {
 			views += video.views;
-		})
+		});
 		return views;
 	}
 
