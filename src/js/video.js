@@ -1,12 +1,12 @@
 class VideoCategory {
 
 	// Category-id => human-readable category.
-	stringForId(id) {
+	static stringForId(id) {
 
 	}
 
 	// Human-readable category => id.
-	idForString(category) {
+	static idForString(category) {
 
 	}
 }
