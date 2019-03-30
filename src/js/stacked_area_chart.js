@@ -2,7 +2,8 @@ var width = 600;
 var height = 600;
 
 class StackedAreaChart {
-	constructor(points) {
+	constructor(dataProvider, points) {
+		this.dataProvider = dataProvider;
 		//margins for the graph
 		this.margin = { top: 20, right: 60, bottom: 200, left: 60 };
 		this.points = points;
