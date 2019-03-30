@@ -13,8 +13,8 @@ class VideoCategory {
 
 class Video {
 
-	constructor(category, title, views, link, author) {
-		this.category = category;
+	constructor(categoryId, title, views, link, author) {
+		this.categoryId = categoryId;
 		this.title = title;
 		this.views = views;
 		this.link = link;
