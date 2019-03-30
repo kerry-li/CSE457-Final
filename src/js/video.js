@@ -1,36 +1,42 @@
 class VideoCategory {
 
-	// Category-id => human-readable category.
-	stringForId(id) {
-
+	constructor(id) {
+		this.id = id;
 	}
 
-	// Human-readable category => id.
-	idForString(category) {
+	static setCategoryMap(map) {
+		VideoCategory.map = map;
+	}
 
+	static categoryForId(id) {
+		return VideoCategory.map[id];
+	}
+
+	// Returns human readable category.
+	toString() {
+		return VideoCategory.categoryForId(this.id);
+	}
+
+	equals(other) {
+		return this.id == other.id;
 	}
 }
 
+VideoCategory.map = {};
+
 class Video {
 
-	get category() {
-
-	}
-
-	get title() {
-
-	}
-
-	get views() {
-
-	}
-
-	get link() {
-
-	}
-
-	get author() {
-		
+	// category: VideoCategory.
+	// title: str.
+	// views: num.
+	// link: str.
+	// author: str.
+	constructor(category, title, views, link, author) {
+		this.category = category;
+		this.title = title;
+		this.views = views;
+		this.link = link;
+		this.author = author;
 	}
 
 }
