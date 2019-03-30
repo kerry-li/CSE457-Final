@@ -8,7 +8,7 @@ class FakeDataProvider {
 	static fromVideos(videos, videosPerPoint) {
 		var data = [];
 		for (var i = 0; i < videos.length; i += videosPerPoint) {
-			data.push(new ChartPoint(videos.slice(i, videosPerPoint)));
+			data.push(new ChartPoint(videos.slice(i, i + videosPerPoint)));
 		}
 		return new FakeDataProvider(data);
 	}
