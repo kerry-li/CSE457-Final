@@ -1,0 +1,6 @@
+class ChartPoint {
+
+	get totalViews() {
+
+	}
+}
