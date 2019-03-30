@@ -19,6 +19,6 @@ class FakeDataProvider {
 	}
 
 	poll() {
-		return this.data.shift();
+		return Promise.resolve(this.data.shift());
 	}
 }
