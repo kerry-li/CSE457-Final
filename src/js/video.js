@@ -4,13 +4,8 @@ class VideoCategory {
 		this.id = id;
 	}
 
-	// Category-id => human-readable category.
-	static stringForId(id) {
-
-	}
-
-	// Human-readable category => id.
-	static idForString(category) {
+	// Returns human readable category.
+	toString() {
 
 	}
 
