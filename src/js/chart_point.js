@@ -14,6 +14,6 @@ class ChartPoint {
 	}
 
 	viewsForCategoryId(id) {
-		return this.videos.filter(video => video.categoryId == id);
+		return this.videos.filter(video => video.category.equals(id));
 	}
 }
