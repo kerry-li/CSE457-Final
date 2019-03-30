@@ -4,15 +4,25 @@ class VideoCategory {
 		this.id = id;
 	}
 
+	static setCategoryMap(map) {
+		VideoCategory.map = map;
+	}
+
+	static categoryForId(id) {
+		return VideoCategory.map[id];
+	}
+
 	// Returns human readable category.
 	toString() {
-
+		return VideoCategory.categoryForId(this.id);
 	}
 
 	equals(other) {
 		return this.id == other.id;
 	}
 }
+
+VideoCategory.map = {};
 
 class Video {
 
