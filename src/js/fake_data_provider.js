@@ -15,7 +15,7 @@ class FakeDataProvider {
 
 	static withNumVideos(n, videosPerPoint, numCategories) {
 		var fakeVideos = generateFakeData(n, numCategories);
-		return FakeDataProvider.fromVideos(videos, videosPerPoint);
+		return FakeDataProvider.fromVideos(fakeVideos, videosPerPoint);
 	}
 
 	poll() {
