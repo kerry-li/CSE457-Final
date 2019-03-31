@@ -1,5 +1,3 @@
-
-
 function start() {
     // 2. Initialize the JavaScript client library.
     VideoCategory.setCategoryMap({
