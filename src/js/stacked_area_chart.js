@@ -1,4 +1,4 @@
-var width = 600;
+var width = 800;
 var height = 600;
 
 class StackedAreaChart {
@@ -48,13 +48,28 @@ class StackedAreaChart {
         while ((point = this.dataProvider.poll()) != undefined) {
             this.data.push(point);
         }
+        var xPadding = 75;
+        var yPadding = 30;
         var xScale = d3.scaleLinear()
             .domain([0, this.data.length])
-            .range([0, this.svgWidth]);
+            .range([xPadding, this.svgWidth]);
 
         var yScale = d3.scaleLinear()
             .domain([d3.max(this.data, d => d.totalViews), 0])
-            .range([0, this.svgHeight]);
+            .range([0, this.svgHeight-yPadding]);
+   //      var xScale = d3.scaleLinear()
+			// .domain([0, 2])
+			// .range([0, this.svgWidth]);
+		var xAxis = this.svg.append("g")
+    		.attr("transform", "translate(0," + (height-yPadding) + ")")
+    		.call(d3.axisBottom(xScale).ticks(3))
+		// var yScale = d3.scaleLinear()
+		// 	.domain([this.svgHeight, 0])
+		// 	.range([0, sum]);
+		var yAxis = this.svg.append("g")
+			.attr("transform", "translate(" + xPadding + ",0)")
+    		.call(d3.axisLeft(yScale).ticks(5))    
+
 
         var stackedData = this.stackedData();
 
