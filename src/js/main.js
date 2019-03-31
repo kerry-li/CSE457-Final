@@ -29,6 +29,7 @@ function loadYoutubeCategoryMapping() {
 
 function createVis() {
     var dataProvider = YoutubeDataProvider.noInitialData();
+    var chart = new StackedAreaChart(fakeDataProvider);
 }
 
 // 1. Load the JavaScript client library.
