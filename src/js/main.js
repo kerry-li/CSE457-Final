@@ -1,13 +1,35 @@
-// TODO: Replace this with mapping obtained from YouTube.
-VideoCategory.setCategoryMap({
-  0: 'Comedy',
-  1: 'Gaming',
-  2: 'Entertainment',
-  3: 'Education'
-});
+function start() {
+    // 2. Initialize the JavaScript client library.
+    gapi.client.init({
+            'apiKey': 'AIzaSyDlVZRSyu6K-j6HYabaJblFPtmoFJZQHZA'
+        })
+        .then(loadYoutubeCategoryMapping)
+        .then(createVis);
+};
 
-var numCategories = 4;
+function loadYoutubeCategoryMapping() {
+    // Load the category mapping from YouTube.
+    gapi.client.request({
+            'path': 'https://www.googleapis.com/youtube/v3/videoCategories',
+            'params': {
+                part: 'snippet',
+                regionCode: 'US'
+            }
+        })
+        .then(function(response) {
+            var mapping = {};
+            response.result.items.forEach(item => {
+                mapping[+item.id] = item.snippet.title;
+            });
+            VideoCategory.setCategoryMap(mapping);
+        }, function(reason) {
+            console.log('Error obtaining Youtube category mapping: ' + reason.result.error.message);
+        });
+}
 
-var fakeData = generateFakeData(20, numCategories);
-console.log(fakeData)
-console.log(fakeData.map(video => video.category.toString()));
+function createVis() {
+    var dataProvider = YoutubeDataProvider.noInitialData();
+}
+
+// 1. Load the JavaScript client library.
+gapi.load('client', start);
