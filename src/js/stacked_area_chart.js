@@ -1,5 +1,6 @@
 class StackedAreaChart {
     constructor(dataProvider) {
+    	var self = this;
         this.dataProvider = dataProvider;
         //margins for the graph
         this.margin = {
@@ -18,6 +19,12 @@ class StackedAreaChart {
             .attr("height", this.height + this.margin.top + this.margin.bottom)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+        // setInterval((function(self) { //Self-executing func which takes 'this' as self
+        //     return function() { //Return a function in the context of 'self'
+        //         self.receiveNewData(); //Thing you wanted to run as non-window 'this'
+        //     }
+        // })(this), 2000);
+        this.receiveNewData();
         this.receiveNewData();
     }
 
@@ -25,9 +32,7 @@ class StackedAreaChart {
     receiveNewData() {
         var newData = [];
         var point;
-        while ((point = this.dataProvider.poll()) != null) {
-            newData.push(point);
-        }
+        newData.push(this.dataProvider.poll());
         Promise.all(newData)
             .then(newData => {
                 this.data.push(...newData);
@@ -61,6 +66,7 @@ class StackedAreaChart {
 
     // Use this.displayData to draw.
     updateVis() {
+    	this.svg.selectAll("*").remove();
         var stackedData = this.stackedData();
         var xScale = d3.scaleLinear()
             .domain([0, this.displayData.length])
@@ -98,8 +104,8 @@ class StackedAreaChart {
             .data(stackedData)
             .enter()
             .append("path")
-            .style("fill", function(d, i) {
-                return colorScale(i);
+            .style("fill", function(d) {
+                return colorScale(new VideoCategory(+d.key));
             })
             .attr("d", function(d) {
                 return area(d);
