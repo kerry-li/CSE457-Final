@@ -13,8 +13,8 @@ class ChartPoint {
         return views;
     }
 
-    viewsForCategoryId(id) {
-        return this.videos.filter(video => video.category.equals(id))
-            .reduce((accumulator, video) => accumulator + video.views);
+    viewsForCategory(category) {
+        return this.videos.filter(video => video.category.equals(category))
+            .reduce((accumulator, video) => accumulator + video.views, 0);
     }
 }
