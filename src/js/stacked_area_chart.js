@@ -2,32 +2,93 @@ var width = 600;
 var height = 600;
 
 class StackedAreaChart {
-	constructor(dataProvider, points) {
+	constructor(dataProvider) {
 		this.dataProvider = dataProvider;
 		//margins for the graph
 		this.margin = { top: 20, right: 60, bottom: 200, left: 60 };
-		this.points = points;
+		this.dataSet1 = this.dataProvider.poll();
+		this.dataSet2 = this.dataProvider.poll();
 		this.svgWidth = width;
 		this.svgHeight = height;
 		this.svg = d3.select("#area-chart").append("svg")
 			.attr("width", width)
 			.attr("height", height)
-			.append("g")
-			.transform("translate",  "translate(" + this.margin.left + "," + this.margin.top + ")")
-
+		this.areaChart = svg.append("g");
 		// scales for the graph
-		this.xScale = d3.scaleLinear().domain([0, points.length]).range([0, svgWidth]);
-		this.yScale = d3.scaleLinear().domain([0,50]).range([0,svgHeight]);
-		updateVis();
+		this.xScale = d3.scaleLinear().domain([0, this.dataSet1.length]).range([0, this.svgWidth]);
+		this.yScale = d3.scaleLinear().domain([0,50]).range([0, this.svgHeight]);
+		this.wrangle();
 	}
-	wrangle() {
-		//if points > 5, remove first, push new points on to points
-		// for (let i = 0; i < newPoints.vids.length; i++ ) {
 
-		// }
-		var stack = d3.stack().keys(["v1", "v2"]);
-		stack(points);
-		updateVis();
+	wrangle() {
+		var unstackedData = [];
+		var cat0Views = [0,0];
+		var cat1Views = [0,0];
+		var cat2Views = [0,0];
+		var cat3Views = [0,0];
+
+		for (var i = 0; i < this.dataSet1.videos.length; i++) {
+			if(this.dataSet1.videos[i].category.id == 0){
+				cat0Views[0] += this.dataSet1.videos[i].views;
+			}
+			else if(this.dataSet1.videos[i].category.id == 1){
+				cat1Views[0] += this.dataSet1.videos[i].views;
+			}
+			else if(this.dataSet1.videos[i].category.id == 2){
+				cat2Views[0] += this.dataSet1.videos[i].views;
+			}
+			else if(this.dataSet1.videos[i].category.id == 3){
+				cat3Views[0] += this.dataSet1.videos[i].views;
+			}
+		}
+
+		for (var i = 0; i < this.dataSet2.videos.length; i++) {
+			if(this.dataSet2.videos[i].category.id == 0){
+				cat0Views[1] += this.dataSet2.videos[i].views;
+			}
+			else if(this.dataSet2.videos[i].category.id == 1){
+				cat1Views[1] += this.dataSet2.videos[i].views;
+			}
+			else if(this.dataSet2.videos[i].category.id == 2){
+				cat2Views[1] += this.dataSet2.videos[i].views;
+			}
+			else if(this.dataSet2.videos[i].category.id == 3){
+				cat3Views[1] += this.dataSet2.videos[i].views;
+			}
+		}
+
+		for (var i = 0; i < 2; i++){
+			unstackedData.push({
+				year: i, 
+				cat0Views: cat0Views[i],
+				cat1Views: cat1Views[i],
+				cat2Views: cat2Views[i],
+				cat3Views: cat3Views[i]
+			});
+		}
+
+		var stack = d3.stack()
+			.keys(['cat0Views', 'cat1Views', 'cat2Views', 'cat3Views'])
+			.order(d3.stackOrderNone)
+    		.offset(d3.stackOffsetNone);
+
+		var stackedData = stack(unstackedData);
+		console.log(stackedData);
+
+
+		var area = d3.area()
+			.x(function(d){
+				return x(d.data.year);
+			})
+			.y0(function(d){ 
+				return y(d[0]); 
+			})
+    		.y1(function(d){
+    		 	return y(d[1]); }
+    		 );
+
+
+		this.updateVis();
 	}
 
 	updateVis() {

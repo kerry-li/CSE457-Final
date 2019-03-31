@@ -7,7 +7,8 @@ VideoCategory.setCategoryMap({
 });
 
 var numCategories = 4;
-
-var fakeData = generateFakeData(20, numCategories);
-console.log(fakeData)
-console.log(fakeData.map(video => video.category.toString()));
+//var fakeData = generateFakeData(20, numCategories);
+var fakeDataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
+var chart = new StackedAreaChart(fakeDataProvider);
+// console.log(fakeData)
+// console.log(fakeData.map(video => video.category.toString()));
