@@ -67,7 +67,10 @@ class StackedAreaChart {
                 var yAxis = this.svg.append("g")
                     .call(d3.axisLeft(yScale)
                         .ticks(5))
-                    
+
+                var colorScale = d3.scaleOrdinal(d3.schemeCategory20)
+                    .domain(d3.keys(VideoCategory.getAllCategories()))
+
                 var area = d3.area()
                     .x(function(d, i) {
                         return xScale(i);
@@ -85,7 +88,7 @@ class StackedAreaChart {
                     .enter()
                     .append("path")
                     .style("fill", function(d, i) {
-                        return (i % 2 == 0) ? "blue" : "red";
+                        return colorScale(i);
                     })
                     .attr("d", function(d) {
                         return area(d);
@@ -93,39 +96,11 @@ class StackedAreaChart {
 
                 this.updateVis();
             });
-
-    }
-
-    updateVis() {
-        // let p = [];
-        // for (let i = 0; i < 2; i++) {
-        // 	for (let j = 0; j < points.length; j++) {
-
-        // 	}
-        // }
-        // for (i in points) {
-        // 	p
-        // }
-        // var area 
-
-        // this.svg.selectAll("path").data(points).enter()
-        // .append("path")
-        // .attr()
-        // .attr("d")
-    }
-
-    // function updateScale() {
-
-    // }
-
-
-    //p format: [ [0,1], [1,1] .....]
-    pointsToD(day) {
-        let d = "M " + String(p[0][0]) + " " + String(p[0][1]) + " ";
-        for (let i = 1; i < p.length; i++) {
-            d += " l " + String(p[i][0]) + " " + String(p[i][1]);
         }
-        d += " z";
-        return d;
+
+        updateVis() {
+
+        }
+
+
     }
-}
