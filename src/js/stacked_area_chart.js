@@ -1,6 +1,3 @@
-var width = 600;
-var height = 600;
-
 class StackedAreaChart {
     constructor(dataProvider) {
         this.dataProvider = dataProvider;
@@ -12,13 +9,14 @@ class StackedAreaChart {
             left: 60
         };
         this.data = [];
-        this.svgWidth = width;
-        this.svgHeight = height;
+        this.width = 800;
+        this.height = 600;
         this.svg = d3.select("#area-chart")
             .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-        this.areaChart = this.svg.append("g");
+            .attr("width", this.width + this.margin.left + this.margin.right)
+            .attr("height", this.height + this.margin.top + this.margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
         // scales for the graph
         // this.xScale = d3.scaleLinear().domain([0, this.dataSet1.length]).range([0, this.svgWidth]);
         // this.yScale = d3.scaleLinear().domain([0,50]).range([0, this.svgHeight]);
@@ -49,18 +47,27 @@ class StackedAreaChart {
         while ((point = this.dataProvider.poll()) != null) {
             newData.push(point);
         }
-
         Promise.all(newData)
             .then(newData => {
                 this.data.push(...newData);
                 var stackedData = this.stackedData();
                 var xScale = d3.scaleLinear()
                     .domain([0, this.data.length])
-                    .range([0, this.svgWidth]);
+                    .range([0, this.width]);
 
                 var yScale = d3.scaleLinear()
                     .domain([d3.max(this.data, d => d.totalViews), 0])
-                    .range([0, this.svgHeight]);
+                    .range([0, this.height]);
+
+                var xAxis = this.svg.append("g")
+                    .attr("transform", "translate(0," + this.height + ")")
+                    .call(d3.axisBottom(xScale)
+                        .ticks(3))
+
+                var yAxis = this.svg.append("g")
+                    .call(d3.axisLeft(yScale)
+                        .ticks(5))
+                    
                 var area = d3.area()
                     .x(function(d, i) {
                         return xScale(i);
@@ -72,7 +79,7 @@ class StackedAreaChart {
                         return yScale(d[1]);
                     });
 
-                this.areaChart
+                this.svg
                     .selectAll("#areaChart")
                     .data(stackedData)
                     .enter()
