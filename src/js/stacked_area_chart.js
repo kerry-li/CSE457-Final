@@ -8,24 +8,35 @@ class StackedAreaChart {
 		this.margin = { top: 20, right: 60, bottom: 200, left: 60 };
 		this.dataSet1 = this.dataProvider.poll();
 		this.dataSet2 = this.dataProvider.poll();
+		this.dataSet3 = this.dataProvider.poll();
 		this.svgWidth = width;
 		this.svgHeight = height;
 		this.svg = d3.select("#area-chart").append("svg")
 			.attr("width", width)
 			.attr("height", height)
-		this.areaChart = svg.append("g");
+		this.areaChart = this.svg.append("g");
 		// scales for the graph
-		this.xScale = d3.scaleLinear().domain([0, this.dataSet1.length]).range([0, this.svgWidth]);
-		this.yScale = d3.scaleLinear().domain([0,50]).range([0, this.svgHeight]);
+		// this.xScale = d3.scaleLinear().domain([0, this.dataSet1.length]).range([0, this.svgWidth]);
+		// this.yScale = d3.scaleLinear().domain([0,50]).range([0, this.svgHeight]);
 		this.wrangle();
 	}
 
 	wrangle() {
+		var xScale = d3.scaleLinear()
+			.domain([0, 2])
+			.range([0, this.svgWidth]);
+
+		var yScale = d3.scaleLinear()
+			.domain([500000000, 0])
+			.range([0, this.svgHeight]);
+
+
+
 		var unstackedData = [];
-		var cat0Views = [0,0];
-		var cat1Views = [0,0];
-		var cat2Views = [0,0];
-		var cat3Views = [0,0];
+		var cat0Views = [0,0,0];
+		var cat1Views = [0,0,0];
+		var cat2Views = [0,0,0];
+		var cat3Views = [0,0,0];
 
 		for (var i = 0; i < this.dataSet1.videos.length; i++) {
 			if(this.dataSet1.videos[i].category.id == 0){
@@ -57,7 +68,22 @@ class StackedAreaChart {
 			}
 		}
 
-		for (var i = 0; i < 2; i++){
+		for (var i = 0; i < this.dataSet3.videos.length; i++) {
+			if(this.dataSet3.videos[i].category.id == 0){
+				cat0Views[2] += this.dataSet3.videos[i].views;
+			}
+			else if(this.dataSet3.videos[i].category.id == 1){
+				cat1Views[2] += this.dataSet3.videos[i].views;
+			}
+			else if(this.dataSet3.videos[i].category.id == 2){
+				cat2Views[2] += this.dataSet3.videos[i].views;
+			}
+			else if(this.dataSet3.videos[i].category.id == 3){
+				cat3Views[2] += this.dataSet3.videos[i].views;
+			}
+		}
+
+		for (var i = 0; i < 3; i++){
 			unstackedData.push({
 				year: i, 
 				cat0Views: cat0Views[i],
@@ -77,16 +103,27 @@ class StackedAreaChart {
 
 
 		var area = d3.area()
-			.x(function(d){
-				return x(d.data.year);
+			.x(function(d, i){
+				return xScale(i);
 			})
 			.y0(function(d){ 
-				return y(d[0]); 
+				return yScale(d[0]); 
 			})
     		.y1(function(d){
-    		 	return y(d[1]); }
-    		 );
+    		 	return yScale(d[1]); 
+    		});
 
+    	this.areaChart
+    		.selectAll("#areaChart")
+    		.data(stackedData)
+    		.enter()
+    		.append("path")
+    			.style("fill", function(d,i)  {
+    				return (i%2==0) ? "blue":"red";
+    			})
+    			.attr("d", function(d) {
+    				return area(d);
+    			});
 
 		this.updateVis();
 	}
