@@ -6,7 +6,7 @@ class StackedAreaChart {
             top: 20,
             right: 60,
             bottom: 200,
-            left: 60
+            left: 100
         };
         this.data = [];
         this.width = 800;
@@ -41,12 +41,17 @@ class StackedAreaChart {
         return stack(readyForStacking);
     }
 
-    wrangle() {
+    receiveNewData() {
         var newData = [];
         var point;
         while ((point = this.dataProvider.poll()) != null) {
             newData.push(point);
         }
+        return newData;
+    }
+
+    wrangle() {
+    	var newData = receiveNewData();
         Promise.all(newData)
             .then(newData => {
                 this.data.push(...newData);
@@ -96,11 +101,11 @@ class StackedAreaChart {
 
                 this.updateVis();
             });
-        }
+    }
 
-        updateVis() {
-
-        }
-
+    updateVis() {
 
     }
+
+
+}
