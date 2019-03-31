@@ -1,9 +1,17 @@
+
+
 function start() {
     // 2. Initialize the JavaScript client library.
+    VideoCategory.setCategoryMap({
+      0: 'Gaming',
+      1: 'Comedy',
+      2: 'Entertainment',
+      3: 'Sports'
+    });
     gapi.client.init({
             'apiKey': 'AIzaSyDlVZRSyu6K-j6HYabaJblFPtmoFJZQHZA'
         })
-        .then(loadYoutubeCategoryMapping)
+        // .then(loadYoutubeCategoryMapping)
         .then(createVis);
 };
 
@@ -28,7 +36,8 @@ function loadYoutubeCategoryMapping() {
 }
 
 function createVis() {
-    var dataProvider = YoutubeDataProvider.noInitialData();
+    // var dataProvider = YoutubeDataProvider.noInitialData();
+    var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
     var chart = new StackedAreaChart(dataProvider);
 }
 
