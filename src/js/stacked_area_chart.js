@@ -44,44 +44,49 @@ class StackedAreaChart {
     }
 
     wrangle() {
+        var newData = [];
         var point;
-        while ((point = this.dataProvider.poll()) != undefined) {
-            this.data.push(point);
+        while ((point = this.dataProvider.poll()) != null) {
+            newData.push(point);
         }
-        var xScale = d3.scaleLinear()
-            .domain([0, this.data.length])
-            .range([0, this.svgWidth]);
 
-        var yScale = d3.scaleLinear()
-            .domain([d3.max(this.data, d => d.totalViews), 0])
-            .range([0, this.svgHeight]);
+        Promise.all(newData)
+            .then(newData => {
+                this.data.push(...newData);
+                var stackedData = this.stackedData();
+                var xScale = d3.scaleLinear()
+                    .domain([0, this.data.length])
+                    .range([0, this.svgWidth]);
 
-        var stackedData = this.stackedData();
+                var yScale = d3.scaleLinear()
+                    .domain([d3.max(this.data, d => d.totalViews), 0])
+                    .range([0, this.svgHeight]);
+                var area = d3.area()
+                    .x(function(d, i) {
+                        return xScale(i);
+                    })
+                    .y0(function(d) {
+                        return yScale(d[0]);
+                    })
+                    .y1(function(d) {
+                        return yScale(d[1]);
+                    });
 
-        var area = d3.area()
-            .x(function(d, i) {
-                return xScale(i);
-            })
-            .y0(function(d) {
-                return yScale(d[0]);
-            })
-            .y1(function(d) {
-                return yScale(d[1]);
+                this.areaChart
+                    .selectAll("#areaChart")
+                    .data(stackedData)
+                    .enter()
+                    .append("path")
+                    .style("fill", function(d, i) {
+                        return (i % 2 == 0) ? "blue" : "red";
+                    })
+                    .attr("d", function(d) {
+                        return area(d);
+                    });
+
+                this.updateVis();
             });
 
-        this.areaChart
-            .selectAll("#areaChart")
-            .data(stackedData)
-            .enter()
-            .append("path")
-            .style("fill", function(d, i) {
-                return (i % 2 == 0) ? "blue" : "red";
-            })
-            .attr("d", function(d) {
-                return area(d);
-            });
-
-        this.updateVis();
     }
 
     updateVis() {
