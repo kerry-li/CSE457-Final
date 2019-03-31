@@ -4,13 +4,13 @@ var height = 600;
 class StackedAreaChart {
     constructor(dataProvider) {
         this.dataProvider = dataProvider;
-        //margins for the graph
-        this.margin = {
-            top: 20,
-            right: 60,
-            bottom: 200,
-            left: 60
-        };
+        // //margins for the graph
+        // this.margin = {
+        //     top: 20,
+        //     right: 60,
+        //     bottom: 200,
+        //     left: 60
+        // };
         this.data = [];
         this.svgWidth = width;
         this.svgHeight = height;
@@ -48,28 +48,29 @@ class StackedAreaChart {
         while ((point = this.dataProvider.poll()) != undefined) {
             this.data.push(point);
         }
+
         var xPadding = 75;
+        var farXPadding = 15;
         var yPadding = 30;
+
         var xScale = d3.scaleLinear()
-            .domain([0, this.data.length])
-            .range([xPadding, this.svgWidth]);
+            .domain([0, this.data.length-1])
+            .range([xPadding, this.svgWidth-farXPadding]);
 
         var yScale = d3.scaleLinear()
             .domain([d3.max(this.data, d => d.totalViews), 0])
             .range([0, this.svgHeight-yPadding]);
-   //      var xScale = d3.scaleLinear()
-			// .domain([0, 2])
-			// .range([0, this.svgWidth]);
+
 		var xAxis = this.svg.append("g")
     		.attr("transform", "translate(0," + (height-yPadding) + ")")
-    		.call(d3.axisBottom(xScale).ticks(3))
-		// var yScale = d3.scaleLinear()
-		// 	.domain([this.svgHeight, 0])
-		// 	.range([0, sum]);
+    		.call(d3.axisBottom(xScale).ticks(this.data.length-2))
+		
 		var yAxis = this.svg.append("g")
 			.attr("transform", "translate(" + xPadding + ",0)")
-    		.call(d3.axisLeft(yScale).ticks(5))    
+    		.call(d3.axisLeft(yScale).ticks(5))   
 
+    	var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+    	colorScale.domain(d3.keys(VideoCategory.getAllCategories()))
 
         var stackedData = this.stackedData();
 
@@ -90,7 +91,8 @@ class StackedAreaChart {
             .enter()
             .append("path")
             .style("fill", function(d, i) {
-                return (i % 2 == 0) ? "blue" : "red";
+            	console.log(colorScale(i))
+                return colorScale(i);
             })
             .attr("d", function(d) {
                 return area(d);
@@ -100,35 +102,8 @@ class StackedAreaChart {
     }
 
     updateVis() {
-        // let p = [];
-        // for (let i = 0; i < 2; i++) {
-        // 	for (let j = 0; j < points.length; j++) {
 
-        // 	}
-        // }
-        // for (i in points) {
-        // 	p
-        // }
-        // var area 
-
-        // this.svg.selectAll("path").data(points).enter()
-        // .append("path")
-        // .attr()
-        // .attr("d")
     }
 
-    // function updateScale() {
-
-    // }
-
-
-    //p format: [ [0,1], [1,1] .....]
-    pointsToD(day) {
-        let d = "M " + String(p[0][0]) + " " + String(p[0][1]) + " ";
-        for (let i = 1; i < p.length; i++) {
-            d += " l " + String(p[i][0]) + " " + String(p[i][1]);
-        }
-        d += " z";
-        return d;
-    }
+    
 }
