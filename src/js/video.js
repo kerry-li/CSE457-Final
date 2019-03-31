@@ -1,5 +1,7 @@
 class VideoCategory {
 
+	static map = {};
+
 	constructor(id) {
 		this.id = id;
 	}
@@ -12,6 +14,16 @@ class VideoCategory {
 		return VideoCategory.map[id];
 	}
 
+	static getAllCategories() {
+		var categories = [];
+		for (var property in VideoCategory.map) {
+			if (VideoCategory.map.hasOwnProperty(property)) {
+				categories.push(new VideoCategory(property));
+			}
+		}
+		return categories;
+	}
+
 	// Returns human readable category.
 	toString() {
 		return VideoCategory.categoryForId(this.id);
@@ -21,8 +33,6 @@ class VideoCategory {
 		return this.id == other.id;
 	}
 }
-
-VideoCategory.map = {};
 
 class Video {
 
