@@ -1,6 +1,6 @@
 class StackedAreaChart {
     constructor(dataProvider) {
-    	var self = this;
+        var self = this;
         this.dataProvider = dataProvider;
         //margins for the graph
         this.margin = {
@@ -19,25 +19,23 @@ class StackedAreaChart {
             .attr("height", this.height + this.margin.top + this.margin.bottom)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-        // setInterval((function(self) { //Self-executing func which takes 'this' as self
-        //     return function() { //Return a function in the context of 'self'
-        //         self.receiveNewData(); //Thing you wanted to run as non-window 'this'
-        //     }
-        // })(this), 2000);
-        this.receiveNewData();
-        this.receiveNewData();
+        self.receiveNewData();
+        setInterval((function(self) { //Self-executing func which takes 'this' as self
+            return function() { //Return a function in the context of 'self'
+                self.receiveNewData(); //Thing you wanted to run as non-window 'this'
+            }
+        })(this), 2000);
     }
 
     // Get new points into this.data.
     receiveNewData() {
-        var newData = [];
-        var point;
-        newData.push(this.dataProvider.poll());
-        Promise.all(newData)
-            .then(newData => {
-                this.data.push(...newData);
+        var newPoint = this.dataProvider.poll();
+        if (newPoint != null) {
+            newPoint.then(point => {
+                this.data.push(point);
                 this.wrangle();
             });
+        }
     }
 
     // Fill this.displayData.
@@ -66,7 +64,8 @@ class StackedAreaChart {
 
     // Use this.displayData to draw.
     updateVis() {
-    	this.svg.selectAll("*").remove();
+        this.svg.selectAll("*")
+            .remove();
         var stackedData = this.stackedData();
         var xScale = d3.scaleLinear()
             .domain([0, this.displayData.length])

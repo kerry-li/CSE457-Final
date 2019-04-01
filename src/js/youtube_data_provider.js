@@ -14,7 +14,7 @@ class YoutubeDataProvider {
                 'params': {
                     part: 'snippet, statistics',
                     chart: 'mostPopular',
-                    maxResults: 50
+                    maxResults: 1
                 }
             })
             .then(function(response) {
@@ -26,7 +26,7 @@ class YoutubeDataProvider {
                     videos.push(new Video(
                     	new VideoCategory(+snippet.categoryId),
                     	snippet.title,
-                    	stats.viewCount,
+                    	+stats.viewCount,
                     	makeVideoUrl(video.id),
                     	snippet.channelTitle
                     ));
