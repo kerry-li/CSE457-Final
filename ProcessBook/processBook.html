@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Process Book</title>
+</head>
+<body>
+	<h1>Process Book</h1>
+	<header>The current area chart design</header>
+	<p>
+		This area chart works, and looks good with false youtube trending data. It charts the number of views of the top 50 trending videos, and organizes them by category; the fake data shows four of these categories. However, when we perform API calls to YouTube, the data is updated by YouTube so slowly that the area chart flatlines. We have ideas for solutions to make our data more interesting: Put the visualization on an Amazon ec2, and make an API call every 12 hours, and save the data so we can animate its appearance. This way the data has a more visually stimulating appearance.
+	</p>
+	<header>Our current area chart design</header>
+	<img src="CurrentAreaChart.png" style="width:400px;height:300px;">
+	<header>These are our old designs</header>
+	<ul>
+			World Map - We intend to make this map clickable, with borders included. A user will be able to click a country where YouTube is available and have the area chart display the data from that region.<br>
+			<img src="world_map.jpg" alt="world-map" style="width:600px;height:400px;"></img>
+		</ul>
+		<ul>
+			Catergory Popularity charts - These were our original ideas for how to show the popularity by views of different categories on YouTube. We went with the area chart.<br>
+			<img src="categories_2.jpg" alt="area chart" style="width:400px;height:400px;"></img>
+			<br>
+			<img src="categories_1.jpg" alt="pie and bar charts" style="width:300px;height:400px;"></img>
+		</ul>
+		<ul>
+			Possible Tooltips - These are some potential ideas to make our area chart more compelling, and provide data unavailable in the area chart.<br>
+			<img src="tooltip.jpg" alt="tooltips" style="width:500px;height:400px;"></img>
+		</ul>
+</body>
+</html>
