@@ -109,6 +109,14 @@ class StackedAreaChart {
             .attr("d", function(d) {
                 return area(d);
             });
+        this.svg.append("text")
+            .attr("transform", "translate("+(-this.margin.left/1.4)+","+this.height/2+")rotate(-90)")
+            .style("text-anchor", "middle")
+            .text("Total Views");
+        this.svg.append("text")
+            .attr("transform", "translate("+(this.width/2)+","+(this.height+30)+")")
+            .style("text-anchor", "middle")
+            .text("Time (seconds)");
     }
 
 
