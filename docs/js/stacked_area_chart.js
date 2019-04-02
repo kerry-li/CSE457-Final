@@ -1,8 +1,6 @@
 class StackedAreaChart {
     constructor(dataProvider) {
-        var self = this;
         this.dataProvider = dataProvider;
-        //margins for the graph
         this.margin = {
             top: 20,
             right: 60,
@@ -19,12 +17,13 @@ class StackedAreaChart {
             .attr("height", this.height + this.margin.top + this.margin.bottom)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-        self.receiveNewData();
+        this.interval = 1000; // Milliseconds.
+        this.receiveNewData();
         setInterval((function(self) { //Self-executing func which takes 'this' as self
             return function() { //Return a function in the context of 'self'
                 self.receiveNewData(); //Thing you wanted to run as non-window 'this'
             }
-        })(this), 2000);
+        })(this), this.interval);
     }
 
     // Get new points into this.data.
