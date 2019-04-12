@@ -11,7 +11,7 @@ class GeoMap {
 		this.availableCountries = ["United States", "Canada", "Mexico", "United Kingdom", "Russia", "Brazil", "Australia", "India", "Turkey", "Japan"];
 		this.width = 1200;
 		this.height = 500;
-		this.svg = d3.select("body").append("svg").attr("width", this.width).attr("height", this.height).attr("fill", "grey")
+		this.svg = d3.select("#map").append("svg").attr("width", this.width).attr("height", this.height).attr("fill", "grey")
 		this.projection = d3.geoEquirectangular()
 		.center([0,15])
 		.scale([this.width/(2*Math.PI)])
