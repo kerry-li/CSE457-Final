@@ -1,0 +1,11 @@
+country|country_code
+United States|US
+Canada|CA
+Mexico|MX
+United Kingdom|GB
+Brazil|BR
+Russia|RU
+Turkey|TR
+India|IN
+Japan|JP
+Australia|AU
