@@ -61,7 +61,6 @@ class GeoMap {
 			.attr("class", function(d) {
 				return (map.availableCountries.includes(d.properties.name)) ? "availableCountry" : "nonAvailableCountry";
 			})
-
 			.on("mouseover", function(d) {
 				d3.select(".countryText").remove();
 				map.svg.append("text")
@@ -70,9 +69,7 @@ class GeoMap {
 					.attr("y", map.height*(39/40)-5)
 					.text(function() {
 						let t = d.properties.name;
-						if (!map.availableCountries.includes(d.properties.name)) {
-							t += " - N/A"
-						}
+						if (!map.availableCountries.includes(d.properties.name)) t += " - N/A";
 						return t;
 					})
 					.style("text-anchor", "middle")
@@ -90,10 +87,22 @@ class GeoMap {
 			// 	// 	.text(d.properties.name)
 			// 	// 	.style("text-anchor", "middle");
 			// })
-			.on("mouseoff", function() {
+			.on("mouseout", function() {
+				d3.select(".countryText").remove();
+				console.log("LLLLLLLLLLL FAT L")
+				console.log(map.selectedCountry)
+				if (map.selectedCountry !== "") {
+					map.svg.append("text")
+					.attr("class", "countryText")
+					.attr("x", 10+(map.width/12))
+					.attr("y", map.height*(39/40)-5)
+					.text(map.selectedCountry)
+					.style("text-anchor", "middle")
+				}
 
 			})
 			.on("click", function(d, i) {
+
 				d3.select("#areaChartSVG").remove();
 				// map.stackedAreaChart.beginDataCollection();
 				map.selectedCountry = d.properties.name;
