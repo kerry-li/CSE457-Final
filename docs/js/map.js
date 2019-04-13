@@ -31,7 +31,7 @@ class GeoMap {
         let map = this;
         d3.json("data/custom50.json", function(json) {
             const boxHeight = map.height / 20;
-            console.log(json.features);
+            // console.log(json.features);
             var countriesGroup = map.svg.append("g")
                 .attr("id", "map");
             countriesGroup.append("rect")
@@ -84,7 +84,8 @@ class GeoMap {
 				    }
 			    })
 			    .on("click", function(d, i) {
-				    d3.select("#areaChartSVG").remove();
+				    d3.select("#area-chart").selectAll("svg").remove();
+                    // d3.select("body").append("div").attr("id", "area-chart");
 				    map.selectedCountry = d.properties.name;
 				    console.log(d.properties.name);
 				    var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
