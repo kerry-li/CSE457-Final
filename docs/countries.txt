@@ -1,10 +1,10 @@
-US
-CA
-MX
-GB
-BR
-RU
-AU
-TR
-IN
-JP
+country|country_code
+United States|US
+Canada|CA
+Mexico|MX
+United Kingdom|GB
+Brazil|BR
+Russia|RU
+Australia|TR
+India|IN
+Japan|JP
