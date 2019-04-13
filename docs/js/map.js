@@ -22,7 +22,7 @@ class GeoMap {
 
 	drawMap() {
 		let map = this;
-		d3.json("https://raw.githubusercontent.com/andybarefoot/andybarefoot-www/master/maps/mapdata/custom50.json", function(json) {
+		d3.json("data/custom50.json", function(json) {
 			var countriesGroup = map.svg.append("g").attr("id", "map");
 			countriesGroup.append("rect")
 			.attr("x", 0)
