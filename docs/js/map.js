@@ -84,8 +84,8 @@ class GeoMap {
 				    }
 			    })
 			    .on("click", function(d, i) {
-				    d3.select("#area-chart").remove();
-                    d3.select("body").append("div").attr("id", "area-chart");
+				    d3.select("#area-chart").selectAll("svg").remove();
+                    // d3.select("body").append("div").attr("id", "area-chart");
 				    map.selectedCountry = d.properties.name;
 				    console.log(d.properties.name);
 				    var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
