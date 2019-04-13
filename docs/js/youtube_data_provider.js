@@ -14,7 +14,7 @@ class YoutubeDataProvider {
                 'params': {
                     part: 'snippet, statistics',
                     chart: 'mostPopular',
-                    maxResults: 1
+                    maxResults: 50
                 }
             })
             .then(function(response) {

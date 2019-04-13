@@ -1,14 +1,7 @@
-// var projection = d3.geoMercator();//geoEqualEarth();
-// var path = d3.geoPath(projection);
-// let svg = d3.select("body").append("svg").attr("width", 400).attr("height", 400);
-// svg.append("path").attr("d", path).attr("stroke-width", "3px");
-
-// console.log(projection);
-// console.log(path);
 class GeoMap {
-    constructor(availableCountries) {
-        this.countries = [];
+    constructor(availableCountries, countryCodes) {
         this.availableCountries = availableCountries;
+        this.countryCodes = countryCodes;
         this.width = 1200;
         this.height = 500;
         this.svg = d3.select("#map")
@@ -24,6 +17,8 @@ class GeoMap {
             .projection(this.projection);
         this.data;
         this.selectedCountry;
+        this.dataProvider;
+        this.chart;
         this.drawMap();
     }
 
@@ -31,7 +26,6 @@ class GeoMap {
         let map = this;
         d3.json("data/custom50.json", function(json) {
             const boxHeight = map.height / 20;
-            // console.log(json.features);
             var countriesGroup = map.svg.append("g")
                 .attr("id", "map");
             countriesGroup.append("rect")
@@ -53,7 +47,7 @@ class GeoMap {
                 .attr("stroke-width", 1)
                 .attr("stroke", "grey")
                 .attr("id", function(d, i) {
-                    return d.properties.iso_a3;
+                    return map.countryCodes[i];
                 })
                 .attr("class", function(d) {
                     // console.log(d)
@@ -85,11 +79,10 @@ class GeoMap {
 			    })
 			    .on("click", function(d, i) {
 				    d3.select("#area-chart").selectAll("svg").remove();
-                    // d3.select("body").append("div").attr("id", "area-chart");
 				    map.selectedCountry = d.properties.name;
 				    console.log(d.properties.name);
-				    var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
-				    var chart = new StackedAreaChart(dataProvider);
+				    map.dataProvider = YoutubeDataProvider.noInitialData(map.countryCodes[i]);
+				    map.chart = new StackedAreaChart(dataProvider);
 				    console.log(chart);
 			    });
 			    map.svg.append("rect")

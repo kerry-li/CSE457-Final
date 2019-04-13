@@ -9,7 +9,7 @@ function start() {
     gapi.client.init({
             'apiKey': 'AIzaSyDlVZRSyu6K-j6HYabaJblFPtmoFJZQHZA'
         })
-        // .then(loadYoutubeCategoryMapping)
+        .then(loadYoutubeCategoryMapping)
         .then(createVis);
 };
 
@@ -38,13 +38,15 @@ function createVis() {
     // var dataProvider = YoutubeDataProvider.noInitialData();
     // var chart = new StackedAreaChart(dataProvider);
     d3.tsv('../countries.tsv', function(data) {
-        console.log("TSV")
+        // console.log("TSV")
         console.log(data)
         let availableCountries = [];
+        let countryCodes = [];
         for (let i = 0; i < data.length; i++) {
             availableCountries.push(data[i].country)
+            countryCodes.push(data[i].country_code);
         }
-        var map = new GeoMap(availableCountries);
+        var map = new GeoMap(availableCountries, countryCodes);
     })
     
 }
