@@ -34,9 +34,19 @@ function loadYoutubeCategoryMapping() {
 }
 
 function createVis() {
-    var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
+    // var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
     // var dataProvider = YoutubeDataProvider.noInitialData();
-    var chart = new StackedAreaChart(dataProvider);
+    // var chart = new StackedAreaChart(dataProvider);
+    d3.tsv('../countries.tsv', function(data) {
+        console.log("TSV")
+        console.log(data)
+        let availableCountries = [];
+        for (let i = 0; i < data.length; i++) {
+            availableCountries.push(data[i].country)
+        }
+        var map = new GeoMap(availableCountries);
+    })
+    
 }
 
 // 1. Load the JavaScript client library.

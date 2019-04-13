@@ -6,9 +6,9 @@
 // console.log(projection);
 // console.log(path);
 class GeoMap {
-    constructor() {
+    constructor(availableCountries) {
         this.countries = [];
-        this.availableCountries = ["United States", "Canada", "Mexico", "United Kingdom", "Russia", "Brazil", "Australia", "India", "Turkey", "Japan"];
+        this.availableCountries = availableCountries;
         this.width = 1200;
         this.height = 500;
         this.svg = d3.select("#map")
