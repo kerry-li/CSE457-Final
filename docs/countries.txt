@@ -5,6 +5,7 @@ Mexico|MX
 United Kingdom|GB
 Brazil|BR
 Russia|RU
-Australia|TR
+Turkey|TR
 India|IN
 Japan|JP
+Australia|AU
