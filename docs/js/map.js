@@ -87,10 +87,17 @@ class GeoMap {
 				    d3.select("#area-chart").selectAll("svg").remove();
                     // d3.select("body").append("div").attr("id", "area-chart");
 				    map.selectedCountry = d.properties.name;
-				    console.log(d.properties.name);
-				    var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
-				    var chart = new StackedAreaChart(dataProvider);
-				    console.log(chart);
+                    d3.tsv('../countries.tsv', function(data) {
+                        for (let i = 0; i < data.length; i++) {
+                            if(map.selectedCountry === data[i].country){
+                                var countryCode = data[i].country_code;
+                                console.log(countryCode);
+                                var dataProvider = YoutubeDataProvider.noInitialData(countryCode);
+                               // var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
+                                var chart = new StackedAreaChart(dataProvider);
+                            }
+                        }
+                    })
 			    });
 			    map.svg.append("rect")
 			    .attr("x", 10)

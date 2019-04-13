@@ -16,7 +16,7 @@ class YoutubeDataProvider {
                     regionCode: this.regionCode,
                     part: 'snippet, statistics',
                     chart: 'mostPopular',
-                    maxResults: 1
+                    maxResults: 50
                 }
             })
             .then(function(response) {
