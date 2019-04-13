@@ -1,0 +1,13 @@
+
+.availableCountry:hover {
+	fill: yellow;
+}
+.nonAvailableCountry:hover {
+	fill: black;
+}
+.availableCountry {
+	fill: red;
+}
+.nonAvailableCountry {
+	fill: white;
+}
