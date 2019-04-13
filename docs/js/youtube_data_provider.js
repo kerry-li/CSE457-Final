@@ -1,17 +1,19 @@
 class YoutubeDataProvider {
 
-    constructor(data) {
+    constructor(data, regionCode) {
         this.data = data;
+        this.regionCode = regionCode;
     }
 
-    static noInitialData() {
-        return new YoutubeDataProvider([]);
+    static noInitialData(regionCode) {
+        return new YoutubeDataProvider([], regionCode);
     }
 
     poll() {
         return gapi.client.request({
                 'path': 'https://www.googleapis.com/youtube/v3/videos',
                 'params': {
+                    regionCode: this.regionCode,
                     part: 'snippet, statistics',
                     chart: 'mostPopular',
                     maxResults: 50
