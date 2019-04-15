@@ -17,7 +17,7 @@ class StackedAreaChart {
             .attr("height", this.height + this.margin.top + this.margin.bottom)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-        this.interval = 1000; // Milliseconds.
+        this.interval = 10000; // Milliseconds.
         this.receiveNewData();
         setInterval((function(self) { //Self-executing func which takes 'this' as self
             return function() { //Return a function in the context of 'self'
