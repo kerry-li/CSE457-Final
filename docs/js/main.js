@@ -38,8 +38,7 @@ function createVis() {
     // var dataProvider = YoutubeDataProvider.noInitialData();
     // var chart = new StackedAreaChart(dataProvider);
     d3.tsv('../countries.tsv', function(data) {
-        // console.log("TSV")
-        console.log(data)
+        console.log(data);
         let availableCountries = [];
         let countryCodes = [];
         for (let i = 0; i < data.length; i++) {
