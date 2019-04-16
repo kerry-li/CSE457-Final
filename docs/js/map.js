@@ -102,5 +102,4 @@ class GeoMap {
 			    .attr("fill", "white")
 		});
 	}
-
 }

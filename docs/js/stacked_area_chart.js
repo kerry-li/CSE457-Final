@@ -67,6 +67,7 @@ class StackedAreaChart {
         this.svg.selectAll("*")
             .remove();
         var stackedData = this.stackedData();
+        //console.log(stackedData);
         var xScale = d3.scaleLinear()
             .domain([0, this.displayData.length])
             .range([0, this.width]);
