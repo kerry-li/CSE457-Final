@@ -14,7 +14,7 @@ class GeoMap {
             // .classed("svg-responsive", true)
             .attr("width", this.width)
             .attr("height", this.height)
-            .attr("fill", "grey")
+            .attr("fill", "#e0ffff")
 
         this.projection = d3.geoEquirectangular()
             .center([0, 15])
@@ -53,12 +53,11 @@ class GeoMap {
                     return (map.availableCountries.includes(d.properties.name)) ? "red" : "white";
                 })
                 .attr("stroke-width", 1)
-                .attr("stroke", "grey")
+                .attr("stroke", "black")
                 .attr("id", function(d, i) {
                     return map.countryCodes[i];
                 })
                 .attr("class", function(d) {
-                    // console.log(d)
                     return (map.availableCountries.includes(d.properties.name)) ? "availableCountry" : "nonAvailableCountry";
                 })
                 .on("mouseover", function(d) {
@@ -72,6 +71,8 @@ class GeoMap {
                             if (!map.availableCountries.includes(d.properties.name)) t += " - N/A";
                             return t;
                         })
+                        .attr("stroke", "black")
+                        .attr("fill", "black")
                         .style("font-size", map.width/6/12)
                         .style("text-anchor", "middle");
                 })
@@ -87,13 +88,15 @@ class GeoMap {
 				    }
 			    })
 			    .on("click", function(d, i) {
-				    d3.select("#area-chart").selectAll("svg").remove();
-				    map.selectedCountry = d.properties.name;
-				    console.log(d.properties.name);
-				    map.dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
+                    if (map.availableCountries.includes(d.properties.name)) {
+				        d3.select("#area-chart").selectAll("svg").remove();
+				        map.selectedCountry = d.properties.name;
+				        console.log(d.properties.name);
+				        map.dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
                     // map.chart = null;
-				    map.chart = new StackedAreaChart(map.dataProvider);
+				        map.chart = new StackedAreaChart(map.dataProvider);
 				    // console.log(chart);
+                    }
 			    });
 			    map.svg.append("rect")
 			    .attr("x", 10)

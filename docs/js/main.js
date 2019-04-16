@@ -9,7 +9,7 @@ function start() {
     gapi.client.init({
             'apiKey': 'AIzaSyDlVZRSyu6K-j6HYabaJblFPtmoFJZQHZA'
         })
-        .then(loadYoutubeCategoryMapping)
+        // .then(loadYoutubeCategoryMapping)
         .then(createVis);
 };
 

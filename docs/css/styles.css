@@ -2,9 +2,9 @@
 .availableCountry:hover {
 	fill: yellow;
 }
-.nonAvailableCountry:hover {
+/*.nonAvailableCountry:hover {
 	fill: black;
-}
+}*/
 .availableCountry {
 	fill: red;
 }
