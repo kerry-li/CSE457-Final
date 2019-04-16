@@ -1,9 +1,10 @@
 class GeoMap {
-    constructor(availableCountries, countryCodes) {
+    constructor(availableCountries, countryCodes, dataProvider) {
         this.availableCountries = availableCountries;
         this.countryCodes = countryCodes;
         this.width = window.innerWidth;
         this.height = (5.0/12.0)*this.width;
+        this.dataProvider = dataProvider;
         //https://stackoverflow.com/questions/16265123/resize-svg-when-window-is-resized-in-d3-js
         this.svg = d3.select("#map")
             // .append("div")
@@ -89,9 +90,7 @@ class GeoMap {
 			    .on("click", function(d, i) {
 				    d3.select("#area-chart").selectAll("svg").remove();
 				    map.selectedCountry = d.properties.name;
-				    console.log(d.properties.name);
-				    map.dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
-                    // map.chart = null;
+				    map.dataProvider.regionCode = d.properties.iso_a2;
 				    map.chart = new StackedAreaChart(map.dataProvider);
 				    // console.log(chart);
 			    });
