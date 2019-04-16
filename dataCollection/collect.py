@@ -10,11 +10,11 @@ import googleapiclient.discovery
 
 DEVELOPER_KEY = "AIzaSyDlVZRSyu6K-j6HYabaJblFPtmoFJZQHZA"
 
-COUNTRIES_FILE = "../docs/countries.txt"
+COUNTRIES_FILE = "../docs/countries.tsv"
 
-DATA_FILE_TEMPLATE = "historical_data_{}.csv"
+DATA_FILE_TEMPLATE = "../docs/data/historical_data_{}.csv"
 
-ERR_FILE_TEMPLATE = "historical_errors_{}.csv"
+ERR_FILE_TEMPLATE = "../docs/data/historical_errors_{}.csv"
 
 def getDataFileNameForCountry(regionCode):
     return DATA_FILE_TEMPLATE.format(regionCode)
@@ -73,7 +73,10 @@ def main():
 
     youtubeClient = YoutubeClient(DEVELOPER_KEY)
     with open(COUNTRIES_FILE) as f:
-        regionCodes = [country.strip() for country in f.readlines()]
+        reader = csv.DictReader(f, delimiter='\t')
+        regionCodes = []
+        for row in reader:
+            regionCodes.append(row['country_code'].strip())
 
     schedule.every(30).minutes.do(lambda: writePointsForRegions(youtubeClient, regionCodes))
     writePointsForRegions(youtubeClient, regionCodes)
