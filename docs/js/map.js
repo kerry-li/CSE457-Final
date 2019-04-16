@@ -11,7 +11,7 @@ class GeoMap {
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("width", this.width)
             .attr("height", this.height)
-            .attr("fill", "grey")
+            .attr("fill", "#e0ffff")
 
         this.projection = d3.geoEquirectangular()
             .center([0, 15])
@@ -50,7 +50,7 @@ class GeoMap {
                     return (map.availableCountries.includes(d.properties.name)) ? "red" : "white";
                 })
                 .attr("stroke-width", 1)
-                .attr("stroke", "grey")
+                .attr("stroke", "black")
                 .attr("id", function(d, i) {
                     return map.countryCodes[i];
                 })
@@ -69,6 +69,8 @@ class GeoMap {
                             if (!map.availableCountries.includes(d.properties.name)) t += " - N/A";
                             return t;
                         })
+                        .attr("stroke", "black")
+                        .attr("fill", "black")
                         .style("font-size", map.width / 6 / 12)
                         .style("text-anchor", "middle");
                 })
