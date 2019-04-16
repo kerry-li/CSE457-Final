@@ -35,7 +35,7 @@ function loadYoutubeCategoryMapping() {
 
 function createVis() {
 
-    d3.tsv('../countries.tsv', function(data) {
+    d3.tsv('countries.tsv', function(data) {
         console.log(data);
         let availableCountries = [];
         let countryCodes = [];
