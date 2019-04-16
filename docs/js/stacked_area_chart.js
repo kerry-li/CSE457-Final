@@ -41,6 +41,7 @@ class StackedAreaChart {
     // Fill this.displayData.
     wrangle() {
         this.displayData = this.data;
+        console.log(this.data)
         this.updateVis();
     }
 
@@ -64,6 +65,16 @@ class StackedAreaChart {
 
     // Use this.displayData to draw.
     updateVis() {
+
+        var tip = d3.tip().attr('class', 'd3-tip')
+            .direction('se')
+            .offset(() => {return [0,0];})
+            .html(function(d) {
+                return "<h2>"+ (new VideoCategory(+d.key)) +"</h2>";
+            });
+
+
+
         this.svg.selectAll("*")
             .remove();
         var stackedData = this.stackedData();
@@ -109,7 +120,9 @@ class StackedAreaChart {
             })
             .attr("d", function(d) {
                 return area(d);
-            });
+            })
+            .on("mouseover", tip.show)
+            .on("mouseout", tip.hide);
         this.svg.append("text")
             .attr("transform", "translate("+(-this.margin.left/1.4)+","+this.height/2+")rotate(-90)")
             .style("text-anchor", "middle")
@@ -118,7 +131,11 @@ class StackedAreaChart {
             .attr("transform", "translate("+(this.width/2)+","+(this.height+30)+")")
             .style("text-anchor", "middle")
             .text("Time (seconds)");
+        this.svg.call(tip);
     }
 
+    tooltipRender(data) {
+
+    }
 
 }
