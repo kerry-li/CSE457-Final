@@ -87,10 +87,14 @@ class GeoMap {
                     }
                 })
                 .on("click", function(d, i) {
+                	var countryCode = d.properties.name;
+                	if (!map.availableCountries.includes(countryCode)) {
+                		return;
+                	}
                     d3.select("#area-chart")
                         .selectAll("svg")
                         .remove();
-                    map.selectedCountry = d.properties.name;
+                    map.selectedCountry = countryCode;
                     map.dataProvider.regionCode = d.properties.iso_a2;
                     map.chart = new StackedAreaChart(map.dataProvider);
                 });
