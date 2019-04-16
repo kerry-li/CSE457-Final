@@ -19,6 +19,7 @@ class StackedAreaChart {
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
         this.interval = 10000; // Milliseconds.
         this.receiveNewData();
+        this.receiveNewData();
         setInterval((function(self) { //Self-executing func which takes 'this' as self
             return function() { //Return a function in the context of 'self'
                 self.receiveNewData(); //Thing you wanted to run as non-window 'this'
@@ -66,6 +67,7 @@ class StackedAreaChart {
         this.svg.selectAll("*")
             .remove();
         var stackedData = this.stackedData();
+        //console.log(stackedData);
         var xScale = d3.scaleLinear()
             .domain([0, this.displayData.length])
             .range([0, this.width]);
