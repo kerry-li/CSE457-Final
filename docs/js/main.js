@@ -34,9 +34,7 @@ function loadYoutubeCategoryMapping() {
 }
 
 function createVis() {
-    // var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
-    // var dataProvider = YoutubeDataProvider.noInitialData();
-    // var chart = new StackedAreaChart(dataProvider);
+
     d3.tsv('../countries.tsv', function(data) {
         console.log(data);
         let availableCountries = [];
