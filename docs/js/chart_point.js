@@ -1,8 +1,10 @@
 class ChartPoint {
 
     // videos: [Video].
-    constructor(videos) {
+    // datetime: Date.
+    constructor(videos, datetime) {
         this.videos = videos;
+        this.datetime = datetime;
     }
 
     get totalViews() {
@@ -11,6 +13,10 @@ class ChartPoint {
             views += video.views;
         });
         return views;
+    }
+
+    addVideo(video) {
+        this.videos.push(video);
     }
 
     viewsForCategory(category) {

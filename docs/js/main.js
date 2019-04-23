@@ -1,15 +1,15 @@
 function start() {
     // 2. Initialize the JavaScript client library.
     VideoCategory.setCategoryMap({
-      0: 'Gaming',
-      1: 'Comedy',
-      2: 'Entertainment',
-      3: 'Sports'
+        0: 'Gaming',
+        1: 'Comedy',
+        2: 'Entertainment',
+        3: 'Sports'
     });
     gapi.client.init({
             'apiKey': 'AIzaSyDlVZRSyu6K-j6HYabaJblFPtmoFJZQHZA'
         })
-        // .then(loadYoutubeCategoryMapping)
+        .then(loadYoutubeCategoryMapping)
         .then(createVis);
 };
 
@@ -36,18 +36,19 @@ function loadYoutubeCategoryMapping() {
 function createVis() {
 
     d3.tsv('countries.tsv', function(data) {
-        console.log(data);
         let availableCountries = [];
         let countryCodes = [];
         for (let i = 0; i < data.length; i++) {
             availableCountries.push(data[i].country)
             countryCodes.push(data[i].country_code);
         }
-        var dataProvider = FakeDataProvider.withNumVideos(10000, 50, 4);
-        // var dataProvider = YoutubeDataProvider.noInitialData();
-        var map = new GeoMap(availableCountries, countryCodes, dataProvider);
+        parseFiles('data/', countryCodes, function(historicalData) {
+            // var dataProvider = FakeDataProvider.withNumVideos(10000, 50, 4);
+            var dataProvider = new YoutubeDataProvider(historicalData, '');
+            var map = new GeoMap(availableCountries, countryCodes, dataProvider);
+        });
     })
-    
+
 }
 
 // 1. Load the JavaScript client library.
