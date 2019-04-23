@@ -17,8 +17,9 @@ class StackedAreaChart {
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.bottom + this.margin.top);
 
+        this.tooltipId = "tooltip";
         svg.append("g")
-            .attr("id", "tooltip")
+            .attr("id", this.tooltipId)
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
         this.svg = svg.append("g")
@@ -127,7 +128,7 @@ class StackedAreaChart {
             .on("click", d => {
                 tip.direction("se");
                 tip.offset([0, this.width + 20]);
-                tip.show(d, Math.round(numericXScale(d3.event.x)), document.getElementById("tooltip"));
+                tip.show(d, Math.floor(numericXScale(d3.event.x)), document.getElementById(this.tooltipId));
             });
         this.svg.append("text")
             .attr("transform", "translate(" + (-this.margin.left / 1.4) + "," + this.height / 2 + ")rotate(-90)")
@@ -144,6 +145,7 @@ class StackedAreaChart {
         var categories = new Array(VideoCategory.getAllCategories()
                 .length)
             .fill([]);
+        console.log(categories.length)
         let videos = this.displayData[chartIndex].videos;
         for (let j = 0; j < videos.length; j++) {
             categories[videos[j].category.id].push({
@@ -160,7 +162,7 @@ class StackedAreaChart {
         });
         for (let i = 0; i < 5; i++) {
             s += "<li>Author: " + String(currentCat[i]['author']) + "<br>";
-            s += 'Title: <a href="https://www.youtube.com/watch?v=' + currentCat[i]['link'] + '">' + currentCat[i]['title'] + "</a>";
+            s += 'Title: <a href="https://www.youtube.com/watch?v=' + currentCat[i]['link'] + '">' + currentCat[i]['title'] + "</a><br>";
             s += "Views: " + currentCat[i]['views'] + "</li>";
         }
         return "<h2>" + String(new VideoCategory(+d.key)) + "</h2><ul>" + s + "</ul>";
