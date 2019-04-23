@@ -19,13 +19,6 @@ class StackedAreaChart {
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
         this.interval = 10000; // Milliseconds.
-        this.receiveNewData();
-        this.receiveNewData();
-        setInterval((function(self) { //Self-executing func which takes 'this' as self
-            return function() { //Return a function in the context of 'self'
-                self.receiveNewData(); //Thing you wanted to run as non-window 'this'
-            }
-        })(this), this.interval);
     }
 
     // Get new points into this.data.
@@ -41,7 +34,7 @@ class StackedAreaChart {
 
     // Fill this.displayData.
     wrangle() {
-        this.displayData = this.data;
+        this.displayData = this.dataProvider.data[this.dataProvider.regionCode];
         this.updateVis();
     }
 
@@ -149,6 +142,7 @@ class StackedAreaChart {
                 return area(d);
             })
             .on("mouseover", function(d) {
+                console.log(xScale.invert(d3.event.x));
                 var x = d3.event.x;
                 var y = d3.event.y;
                 tip.offset([y, x-200])

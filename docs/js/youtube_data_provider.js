@@ -10,7 +10,7 @@ class YoutubeDataProvider {
     }
 
     poll() {
-        if (this.data.length > 0) {
+        if (this.data[this.regionCode].length > 0) {
             return Promise.resolve(this.data[this.regionCode].shift());
         }
 

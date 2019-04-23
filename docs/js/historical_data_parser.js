@@ -43,7 +43,7 @@ function parseFile(regionCode, callback) {
         		parsedData.points.push(currentPoint);
         		currentPoint = new ChartPoint([], datetime);
         	}
-            currentPoint.addVideo(new Video(row.categoryId, row.title, row.viewCount, row.url, row.channelTitle));
+            currentPoint.addVideo(new Video(new VideoCategory(+row.categoryId), row.title, +row.viewCount, row.url, row.channelTitle));
         });
         callback(null, parsedData);
     });
