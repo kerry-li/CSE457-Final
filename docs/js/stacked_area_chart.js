@@ -19,6 +19,7 @@ class StackedAreaChart {
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
         this.interval = 10000; // Milliseconds.
+        this.wrangle();
     }
 
     // Get new points into this.data.
