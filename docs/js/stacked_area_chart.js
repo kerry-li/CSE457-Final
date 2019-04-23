@@ -17,8 +17,9 @@ class StackedAreaChart {
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.bottom + this.margin.top);
 
+        this.tooltipId = "tooltip";
         svg.append("g")
-            .attr("id", "tooltip")
+            .attr("id", this.tooltipId)
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
         this.svg = svg.append("g")
@@ -127,7 +128,7 @@ class StackedAreaChart {
             .on("click", d => {
                 tip.direction("se");
                 tip.offset([0, this.width + 20]);
-                tip.show(d, Math.round(numericXScale(d3.event.x)), document.getElementById("tooltip"));
+                tip.show(d, Math.floor(numericXScale(d3.event.x)), document.getElementById(this.tooltipId));
             });
         this.svg.append("text")
             .attr("transform", "translate(" + (-this.margin.left / 1.4) + "," + this.height / 2 + ")rotate(-90)")
