@@ -15,7 +15,7 @@ class StackedAreaChart {
             .append("svg")
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("width", this.width + this.margin.left + this.margin.right)
-            .attr("height", this.height+this.margin.bottom + this.margin.top + this.margin.bottom)
+            .attr("height", this.height + this.margin.bottom + this.margin.top + this.margin.bottom)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
         this.interval = 10000; // Milliseconds.
@@ -49,6 +49,7 @@ class StackedAreaChart {
             categories.forEach(category => {
                 stackPoint[category.id] = point.viewsForCategory(category);
             });
+            stackPoint.datetime = point.datetime;
             readyForStacking.push(stackPoint);
         });
         var stack = d3.stack()
@@ -100,8 +101,8 @@ class StackedAreaChart {
             .remove();
         var stackedData = this.stackedData();
         //console.log(stackedData);
-        var xScale = d3.scaleLinear()
-            .domain([0, this.displayData.length])
+        var xScale = d3.scaleTime()
+            .domain(d3.extent(this.displayData, d => d.datetime))
             .range([0, this.width]);
 
         var yScale = d3.scaleLinear()
@@ -121,8 +122,8 @@ class StackedAreaChart {
             .domain(d3.keys(VideoCategory.getAllCategories()))
 
         var area = d3.area()
-            .x(function(d, i) {
-                return xScale(i);
+            .x(function(d) {
+                return xScale(d.data.datetime);
             })
             .y0(function(d) {
                 return yScale(d[0]);
@@ -143,7 +144,6 @@ class StackedAreaChart {
                 return area(d);
             })
             .on("mouseover", function(d) {
-                console.log(xScale.invert(d3.event.x));
                 var x = d3.event.x;
                 var y = d3.event.y;
                 tip.offset([y, x-200])
@@ -161,9 +161,9 @@ class StackedAreaChart {
             .style("text-anchor", "middle")
             .text("Total Views");
         this.svg.append("text")
-            .attr("transform", "translate("+(this.width/2)+","+(this.height+30)+")")
+            .attr("transform", "translate("+(this.width/2)+","+(this.height + this.margin.bottom / 3)+")")
             .style("text-anchor", "middle")
-            .text("Time (seconds)");
+            .text("Time");
         this.svg.call(tip);
     }
 
