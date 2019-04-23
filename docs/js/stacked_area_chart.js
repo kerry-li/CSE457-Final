@@ -144,6 +144,7 @@ class StackedAreaChart {
         var categories = new Array(VideoCategory.getAllCategories()
                 .length)
             .fill([]);
+        console.log(categories.length)
         let videos = this.displayData[chartIndex].videos;
         for (let j = 0; j < videos.length; j++) {
             categories[videos[j].category.id].push({
@@ -160,7 +161,7 @@ class StackedAreaChart {
         });
         for (let i = 0; i < 5; i++) {
             s += "<li>Author: " + String(currentCat[i]['author']) + "<br>";
-            s += 'Title: <a href="https://www.youtube.com/watch?v=' + currentCat[i]['link'] + '">' + currentCat[i]['title'] + "</a>";
+            s += 'Title: <a href="https://www.youtube.com/watch?v=' + currentCat[i]['link'] + '">' + currentCat[i]['title'] + "</a><br>";
             s += "Views: " + currentCat[i]['views'] + "</li>";
         }
         return "<h2>" + String(new VideoCategory(+d.key)) + "</h2><ul>" + s + "</ul>";
