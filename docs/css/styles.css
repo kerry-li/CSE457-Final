@@ -21,8 +21,8 @@
     background: #FFFFFF;
     color: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
-    pointer-events: none;
 }
+
 #chart-title{
     position: relative;
     left: 450px;

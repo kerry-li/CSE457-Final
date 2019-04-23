@@ -11,12 +11,15 @@ class StackedAreaChart {
         this.displayData = this.data;
         this.width = 800;
         this.height = 600;
-        this.svg = d3.select("#area-chart")
+        var svg = d3.select("#area-chart")
             .append("svg")
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("width", this.width + this.margin.left + this.margin.right)
-            .attr("height", this.height + this.margin.bottom + this.margin.top)// + this.margin.bottom)
-            .append("g")
+            .attr("height", this.height + this.margin.bottom + this.margin.top);
+
+        svg.append("g").attr("id", "tooltip").attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+        this.svg = svg.append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
         this.interval = 10000; // Milliseconds.
         this.wrangle();
@@ -93,10 +96,7 @@ class StackedAreaChart {
                 }
                 let yeet = "<h2>"+ String(new VideoCategory(+d.key)) +"</h2><ul>" + s + "</ul>";
                 return yeet;
-
             });
-
-
 
         this.svg.selectAll("*")
             .remove();
@@ -144,11 +144,11 @@ class StackedAreaChart {
             .attr("d", function(d) {
                 return area(d);
             })
-            .on("click", function(d){
+            .on("click", d => {
                 var x = d3.event.x;
-                var y = d3.event.y;
-                tip.offset([y,self.width - 100])
-                tip.show(d);
+                tip.direction("se");
+                tip.offset([0, this.width + 20]);
+                tip.show(d, document.getElementById("tooltip"));
             })
             // .on("mouseover", function(d) {
             //     var x = d3.event.x;
