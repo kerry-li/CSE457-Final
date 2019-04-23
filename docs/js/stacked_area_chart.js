@@ -65,35 +65,8 @@ class StackedAreaChart {
         d3.selectAll(".d3-tip").remove();
         var tip = d3.tip()
             .attr('class', 'd3-tip')
-            .html(function(d) {
-                var categories = new Array(VideoCategory.getAllCategories().length).fill([]);
-                for (let i = 0; i < self.displayData.length; i++) {
-                    let videos = self.displayData[i].videos;
-                    for (let j = 0; j < videos.length; j++) {
-                        // if (categories[videos[i].category.id].includes(videos[i].author)) {
-                        //     console.log("YAAAS")
-                        // } else {
-                            categories[videos[j].category.id].push({
-                                "author": videos[j].author,
-                                "links": [videos[j].link],
-                                "views": videos[j].views,
-                                "titles": [videos[j].title]
-                            })
-                            // console.log("add author");
-                        // }
-                    }
-                }
-                let s = "";
-                let currentCat = categories[d.key];
-                currentCat.sort((a,b) => {return b.views-a.views});
-                for (let i = 0; i < 5; i++) {
-                    s += "<li>Author: " + String(currentCat[i]['author']) + "<br>";
-                    s += 'Title: <a href="'+ currentCat[i]['links'][0]+ '">' + currentCat[i]['titles'][0]+"</a>";
-                    s += "Views: " + currentCat[i]['views'] + "</li>";
-                }
-                let yeet = "<h2>"+ String(new VideoCategory(+d.key)) +"</h2><ul>" + s + "</ul>";
-                return yeet;
-
+            .html(function(d, chartIndex) {
+                return self.tooltipRender(d, chartIndex);
             });
 
 
@@ -104,7 +77,9 @@ class StackedAreaChart {
         var xScale = d3.scaleTime()
             .domain(d3.extent(this.displayData, d => d.datetime))
             .range([0, this.width]);
-
+        var numericXScale = d3.scaleLinear()
+            .domain([0, this.width])
+            .range([0, this.displayData.length-1]);
         var yScale = d3.scaleLinear()
             .domain([d3.max(this.displayData, d => d.totalViews), 0])
             .range([0, this.height]);
@@ -148,7 +123,7 @@ class StackedAreaChart {
                 var x = d3.event.x;
                 var y = d3.event.y;
                 tip.offset([y,self.width - 100])
-                tip.show(d);
+                tip.show(d, Math.round(numericXScale(x)))
             })
             // .on("mouseover", function(d) {
             //     var x = d3.event.x;
@@ -174,8 +149,27 @@ class StackedAreaChart {
         this.svg.call(tip);
     }
 
-    tooltipRender(data) {
-
+    tooltipRender(d, chartIndex) {
+        var categories = new Array(VideoCategory.getAllCategories().length).fill([]);
+                // console.log(chartIndex)
+        let videos = this.displayData[chartIndex].videos;
+        for (let j = 0; j < videos.length; j++) {
+                categories[videos[j].category.id].push({   
+                    "author": videos[j].author,
+                    "link": videos[j].link,
+                    "views": videos[j].views,
+                    "title": videos[j].title
+                })
+        }
+        let s = "";
+        let currentCat = categories[d.key];
+        currentCat.sort((a,b) => {return b.views-a.views});
+        for (let i = 0; i < 5; i++) {
+            s += "<li>Author: " + String(currentCat[i]['author']) + "<br>";
+            s += 'Title: <a href="https://www.youtube.com/watch?v='+ currentCat[i]['link']+ '">' + currentCat[i]['title']+"</a>";
+            s += "Views: " + currentCat[i]['views'] + "</li>";
+        }
+        return "<h2>"+ String(new VideoCategory(+d.key)) +"</h2><ul>" + s + "</ul>";                
     }
 
 }
