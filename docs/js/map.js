@@ -82,6 +82,9 @@ class GeoMap {
                             .attr("class", "countryText")
                             .attr("x", 10 + (map.width / 12))
                             .attr("y", map.height * (39 / 40) - 5)
+                            .attr("stroke", "black")
+                            .attr("fill", "black")
+                            .style("font-size", map.width / 6 / 12)
                             .text(map.selectedCountry)
                             .style("text-anchor", "middle")
                     }
