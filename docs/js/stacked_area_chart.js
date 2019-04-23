@@ -2,9 +2,9 @@ class StackedAreaChart {
     constructor(dataProvider) {
         this.dataProvider = dataProvider;
         this.margin = {
-            top: 20,
+            top: 50,
             right: 60,
-            bottom: 200,
+            bottom: 100,
             left: 100
         };
         this.data = [];
@@ -15,7 +15,7 @@ class StackedAreaChart {
             .append("svg")
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("width", this.width + this.margin.left + this.margin.right)
-            .attr("height", this.height + this.margin.bottom + this.margin.top + this.margin.bottom)
+            .attr("height", this.height + this.margin.bottom + this.margin.top)// + this.margin.bottom)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
         this.interval = 10000; // Milliseconds.
@@ -61,13 +61,14 @@ class StackedAreaChart {
 
     // Use this.displayData to draw.
     updateVis() {
-        let lmao = this;
+        let self = this;
         d3.selectAll(".d3-tip").remove();
-        var tip = d3.tip().attr('class', 'd3-tip')
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
             .html(function(d) {
                 var categories = new Array(VideoCategory.getAllCategories().length).fill([]);
-                for (let i = 0; i < lmao.displayData.length; i++) {
-                    let videos = lmao.displayData[i].videos;
+                for (let i = 0; i < self.displayData.length; i++) {
+                    let videos = self.displayData[i].videos;
                     for (let j = 0; j < videos.length; j++) {
                         // if (categories[videos[i].category.id].includes(videos[i].author)) {
                         //     console.log("YAAAS")
@@ -142,19 +143,25 @@ class StackedAreaChart {
             .attr("d", function(d) {
                 return area(d);
             })
-            .on("mouseover", function(d) {
+            .on("click", function(d){
                 var x = d3.event.x;
                 var y = d3.event.y;
-                tip.offset([y, x-200])
+                tip.offset([y,self.width - 100])
                 tip.show(d);
             })
-            .on("mousemove", function(d, i) {
-                var x = d3.event.x;
-                var y = d3.event.y;
-                tip.offset([y+(50*i), x-200])
-                tip.show(d);
-            })
-            .on("mouseout", tip.hide);
+            // .on("mouseover", function(d) {
+            //     var x = d3.event.x;
+            //     var y = d3.event.y;
+            //     tip.offset([y, x-200])
+            //     tip.show(d);
+            // })
+            // .on("mousemove", function(d, i) {
+            //     var x = d3.event.x;
+            //     var y = d3.event.y;
+            //     tip.offset([y+(50*i), x-200])
+            //     tip.show(d);
+            // })
+            // .on("mouseout", tip.hide);
         this.svg.append("text")
             .attr("transform", "translate("+(-this.margin.left/1.4)+","+this.height/2+")rotate(-90)")
             .style("text-anchor", "middle")

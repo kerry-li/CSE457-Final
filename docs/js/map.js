@@ -94,6 +94,7 @@ class GeoMap {
                 	if (!map.availableCountries.includes(countryCode)) {
                 		return;
                 	}
+                    document.getElementById("chart-title").innerHTML = countryCode;
                     d3.select("#area-chart")
                         .selectAll("svg")
                         .remove();

@@ -23,6 +23,10 @@
     border-radius: 10px;
     pointer-events: none;
 }
+#chart-title{
+    position: relative;
+    left: 450px;
+}
 /*.d3-tip.e:after {
     content: "\26A0";
     margin: -4px 0 0 0;
