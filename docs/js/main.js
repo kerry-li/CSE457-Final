@@ -43,7 +43,7 @@ function createVis() {
             availableCountries.push(data[i].country)
             countryCodes.push(data[i].country_code);
         }
-        var dataProvider = FakeDataProvider.withNumVideos(10000, 50, 4);
+        var dataProvider = FakeDataProvider.withNumVideos(1000, 50, 4);
         // var dataProvider = YoutubeDataProvider.noInitialData();
         var map = new GeoMap(availableCountries, countryCodes, dataProvider);
     })
