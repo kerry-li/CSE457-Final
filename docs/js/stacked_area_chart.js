@@ -17,7 +17,9 @@ class StackedAreaChart {
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.bottom + this.margin.top);
 
-        svg.append("g").attr("id", "tooltip").attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+        svg.append("g")
+            .attr("id", "tooltip")
+            .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
         this.svg = svg.append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -65,37 +67,12 @@ class StackedAreaChart {
     // Use this.displayData to draw.
     updateVis() {
         let self = this;
-        d3.selectAll(".d3-tip").remove();
+        d3.selectAll(".d3-tip")
+            .remove();
         var tip = d3.tip()
             .attr('class', 'd3-tip')
-            .html(function(d) {
-                var categories = new Array(VideoCategory.getAllCategories().length).fill([]);
-                for (let i = 0; i < self.displayData.length; i++) {
-                    let videos = self.displayData[i].videos;
-                    for (let j = 0; j < videos.length; j++) {
-                        // if (categories[videos[i].category.id].includes(videos[i].author)) {
-                        //     console.log("YAAAS")
-                        // } else {
-                            categories[videos[j].category.id].push({
-                                "author": videos[j].author,
-                                "links": [videos[j].link],
-                                "views": videos[j].views,
-                                "titles": [videos[j].title]
-                            })
-                            // console.log("add author");
-                        // }
-                    }
-                }
-                let s = "";
-                let currentCat = categories[d.key];
-                currentCat.sort((a,b) => {return b.views-a.views});
-                for (let i = 0; i < 5; i++) {
-                    s += "<li>Author: " + String(currentCat[i]['author']) + "<br>";
-                    s += 'Title: <a href="'+ currentCat[i]['links'][0]+ '">' + currentCat[i]['titles'][0]+"</a>";
-                    s += "Views: " + currentCat[i]['views'] + "</li>";
-                }
-                let yeet = "<h2>"+ String(new VideoCategory(+d.key)) +"</h2><ul>" + s + "</ul>";
-                return yeet;
+            .html(function(d, i) {
+                return self.tooltipRender(d, i);
             });
 
         this.svg.selectAll("*")
@@ -104,12 +81,15 @@ class StackedAreaChart {
         var xScale = d3.scaleTime()
             .domain(d3.extent(this.displayData, d => d.datetime))
             .range([0, this.width]);
-
+        var numericXScale = d3.scaleLinear()
+            .domain([0, this.width])
+            .range([0, this.displayData.length - 1]);
         var yScale = d3.scaleLinear()
             .domain([d3.max(this.displayData, d => d.totalViews), 0])
             .range([0, this.height]);
 
-        var numDays = new Set(this.displayData.map(d => d.datetime.getDay())).size;
+        var numDays = new Set(this.displayData.map(d => d.datetime.getDay()))
+            .size;
         var xAxis = this.svg.append("g")
             .attr("transform", "translate(0," + this.height + ")")
             .call(d3.axisBottom(xScale)
@@ -145,37 +125,45 @@ class StackedAreaChart {
                 return area(d);
             })
             .on("click", d => {
-                var x = d3.event.x;
                 tip.direction("se");
                 tip.offset([0, this.width + 20]);
-                tip.show(d, document.getElementById("tooltip"));
-            })
-            // .on("mouseover", function(d) {
-            //     var x = d3.event.x;
-            //     var y = d3.event.y;
-            //     tip.offset([y, x-200])
-            //     tip.show(d);
-            // })
-            // .on("mousemove", function(d, i) {
-            //     var x = d3.event.x;
-            //     var y = d3.event.y;
-            //     tip.offset([y+(50*i), x-200])
-            //     tip.show(d);
-            // })
-            // .on("mouseout", tip.hide);
+                tip.show(d, Math.round(numericXScale(d3.event.x)), document.getElementById("tooltip"));
+            });
         this.svg.append("text")
-            .attr("transform", "translate("+(-this.margin.left/1.4)+","+this.height/2+")rotate(-90)")
+            .attr("transform", "translate(" + (-this.margin.left / 1.4) + "," + this.height / 2 + ")rotate(-90)")
             .style("text-anchor", "middle")
             .text("Total Views");
         this.svg.append("text")
-            .attr("transform", "translate("+(this.width/2)+","+(this.height + this.margin.bottom / 3)+")")
+            .attr("transform", "translate(" + (this.width / 2) + "," + (this.height + this.margin.bottom / 3) + ")")
             .style("text-anchor", "middle")
             .text("Time");
         this.svg.call(tip);
     }
 
-    tooltipRender(data) {
-
+    tooltipRender(d, chartIndex) {
+        var categories = new Array(VideoCategory.getAllCategories()
+                .length)
+            .fill([]);
+        let videos = this.displayData[chartIndex].videos;
+        for (let j = 0; j < videos.length; j++) {
+            categories[videos[j].category.id].push({
+                "author": videos[j].author,
+                "link": videos[j].link,
+                "views": videos[j].views,
+                "title": videos[j].title
+            })
+        }
+        let s = "";
+        let currentCat = categories[d.key];
+        currentCat.sort((a, b) => {
+            return b.views - a.views
+        });
+        for (let i = 0; i < 5; i++) {
+            s += "<li>Author: " + String(currentCat[i]['author']) + "<br>";
+            s += 'Title: <a href="https://www.youtube.com/watch?v=' + currentCat[i]['link'] + '">' + currentCat[i]['title'] + "</a>";
+            s += "Views: " + currentCat[i]['views'] + "</li>";
+        }
+        return "<h2>" + String(new VideoCategory(+d.key)) + "</h2><ul>" + s + "</ul>";
     }
 
 }
