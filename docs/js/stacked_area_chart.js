@@ -108,14 +108,15 @@ class StackedAreaChart {
             .domain([d3.max(this.displayData, d => d.totalViews), 0])
             .range([0, this.height]);
 
+        var numDays = new Set(this.displayData.map(d => d.datetime.getDay())).size;
         var xAxis = this.svg.append("g")
             .attr("transform", "translate(0," + this.height + ")")
             .call(d3.axisBottom(xScale)
-                .ticks(3))
+                .ticks(numDays));
 
         var yAxis = this.svg.append("g")
             .call(d3.axisLeft(yScale)
-                .ticks(5))
+                .ticks(5));
 
         var colorScale = d3.scaleOrdinal(d3.schemeCategory20)
             .domain(d3.keys(VideoCategory.getAllCategories()))
