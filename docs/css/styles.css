@@ -23,18 +23,17 @@
     border-radius: 10px;
     pointer-events: none;
 }
-.d3-tip.e:after {
+/*.d3-tip.e:after {
     content: "\26A0";
-    /*margin: -4px 0 0 0;*/
+    margin: -4px 0 0 0;
     top: -800px;
     left: -8px;
 }
 
-/* Southward tooltips */
 .d3-tip.s:after {
     content: "\25B2";
-    /*margin: 4px 0 1px 0;*/
+    margin: 4px 0 1px 0;
     top: -8px;
     left: 1481px;
     text-align: center;
-}
+}*/
