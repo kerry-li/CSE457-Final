@@ -18,9 +18,12 @@ class StackedAreaChart {
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.bottom + this.margin.top);
 
-        this.breakdownRadius = this.margin.right / 2;
         this.breakdown = svg.append("g")
-            .attr("transform", "translate(" + (this.margin.left + this.width + this.breakdownRadius) + "," + (this.margin.top + this.breakdownRadius) + ")");
+            .attr("transform", "translate(" + (this.margin.left + this.width) + "," + this.margin.top + ")");
+
+        this.breakdownPieRadius = this.margin.right / 2;
+        this.breakdownPie = this.breakdown.append("g")
+            .attr("transform", "translate(" + this.breakdownPieRadius + "," + this.breakdownPieRadius + ")");
 
         this.svg = svg.append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -122,17 +125,19 @@ class StackedAreaChart {
                 this.updateBreakdown(point, 5);
             })
             .on("mouseover", d => {
-                d3.selectAll(".catText").remove();
+                d3.selectAll(".catText")
+                    .remove();
                 self.svg.append("text")
                     .attr("class", "catText")
-                    .attr("x", (this.width-this.margin.left)/2)
+                    .attr("x", (this.width - this.margin.left) / 2)
                     .attr("y", 0)
                     .style("text-anchor", "middle")
                     .style("font-size", 20)
                     .text(new VideoCategory(d.key));
             })
             .on("mouseout", () => {
-                 d3.selectAll(".catText").remove();
+                d3.selectAll(".catText")
+                    .remove();
             });
         this.svg.append("text")
             .attr("transform", "translate(" + (-this.margin.left / 1.4) + "," + this.height / 2 + ")rotate(-90)")
@@ -144,8 +149,8 @@ class StackedAreaChart {
             .text("Time");
         this.svg.append("text")
             .attr("class", "countryTitle")
-            .attr("x", (this.width-this.margin.left)/2)
-            .attr("y", -this.margin.top/2)
+            .attr("x", (this.width - this.margin.left) / 2)
+            .attr("y", -this.margin.top / 2)
             .style("text-anchor", "middle")
             .style("font-size", 28)
             .text(this.country);
@@ -162,7 +167,8 @@ class StackedAreaChart {
         var colorScale = d3.scaleOrdinal(d3.schemeCategory20c);
 
         var tipClass = "d3-tip";
-        d3.selectAll("." + tipClass).remove();
+        d3.selectAll("." + tipClass)
+            .remove();
         var tip = d3.tip()
             .attr("class", tipClass)
             .html(function(d, i) {
@@ -177,7 +183,7 @@ class StackedAreaChart {
 
         this.breakdown.call(tip);
 
-        var arcs = this.breakdown.selectAll(".arc")
+        var arcs = this.breakdownPie.selectAll(".arc")
             .data(d3.pie()(topViews.concat(otherViews)));
         arcs.enter()
             .append("path")
@@ -186,7 +192,7 @@ class StackedAreaChart {
             .attr("fill", (d, i) => colorScale(i))
             .attr("d", d3.arc()
                 .innerRadius(0)
-                .outerRadius(this.breakdownRadius))
+                .outerRadius(this.breakdownPieRadius))
             .on("click", (d, i) => {
                 tip.hide();
                 tip.direction("se");
@@ -194,10 +200,12 @@ class StackedAreaChart {
                 tip.show(d, i);
             })
             .on("mouseover", function() {
-                d3.select(this).style("opacity", 0.6);
+                d3.select(this)
+                    .style("opacity", 0.6);
             })
             .on("mouseout", function() {
-                d3.select(this).style("opacity", 1);
+                d3.select(this)
+                    .style("opacity", 1);
             });
 
         arcs.exit()
