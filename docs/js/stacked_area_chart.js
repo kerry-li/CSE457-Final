@@ -159,12 +159,12 @@ class StackedAreaChart {
         var topViews = topVideos.map(v => v.views);
         var otherViews = point.totalViews - topVideos.reduce((accum, v) => accum + v.views, 0);
 
-        var arcs = this.breakdown.selectAll("arc")
-            .data(d3.pie()(topViews.concat(otherViews)));
         var colorScale = d3.scaleOrdinal(d3.schemeCategory20c);
 
+        var tipClass = "d3-tip";
+        d3.selectAll("." + tipClass).remove();
         var tip = d3.tip()
-            .attr("class", "d3-tip")
+            .attr("class", tipClass)
             .html(function(d, i) {
                 if (i >= numSlices) {
                     return `<h2>Other videos</h2><br/>
@@ -177,10 +177,11 @@ class StackedAreaChart {
 
         this.breakdown.call(tip);
 
+        var arcs = this.breakdown.selectAll(".arc")
+            .data(d3.pie()(topViews.concat(otherViews)));
         arcs.enter()
-            .append("g")
-            .attr("class", "arc")
             .append("path")
+            .attr("class", "arc")
             .merge(arcs)
             .attr("fill", (d, i) => colorScale(i))
             .attr("d", d3.arc()
