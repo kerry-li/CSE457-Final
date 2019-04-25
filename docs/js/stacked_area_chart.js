@@ -192,6 +192,12 @@ class StackedAreaChart {
                 tip.offset([-10, -10]);
                 tip.show(d, i);
             })
+            .on("mouseover", function() {
+                d3.select(this).style("opacity", 0.6);
+            })
+            .on("mouseout", function() {
+                d3.select(this).style("opacity", 1);
+            });
 
         arcs.exit()
             .remove();
