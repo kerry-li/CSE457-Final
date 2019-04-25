@@ -94,13 +94,13 @@ class GeoMap {
                 	if (!map.availableCountries.includes(countryCode)) {
                 		return;
                 	}
-                    document.getElementById("chart-title").innerHTML = countryCode;
+                    // document.getElementById("chart-title").innerHTML = countryCode;
                     d3.select("#area-chart")
                         .selectAll("svg")
                         .remove();
                     map.selectedCountry = countryCode;
                     map.dataProvider.regionCode = d.properties.iso_a2;
-                    map.chart = new StackedAreaChart(map.dataProvider);
+                    map.chart = new StackedAreaChart(map.dataProvider, countryCode);
                 });
             map.svg.append("rect")
                 .attr("x", 10)
