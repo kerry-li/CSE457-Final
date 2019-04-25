@@ -1,5 +1,5 @@
 class StackedAreaChart {
-    constructor(dataProvider) {
+    constructor(dataProvider, country) {
         this.dataProvider = dataProvider;
         this.margin = {
             top: 50,
@@ -8,6 +8,7 @@ class StackedAreaChart {
             left: 100
         };
         this.data = [];
+        this.country = country;
         this.displayData = this.data;
         this.width = 800;
         this.height = 600;
@@ -119,6 +120,19 @@ class StackedAreaChart {
             .on("click", d => {
                 var point = this.displayData[Math.floor(screenXToDataScale(d3.event.x))];
                 this.updateBreakdown(point, 5);
+            })
+            .on("mouseover", d => {
+                d3.selectAll(".catText").remove();
+                self.svg.append("text")
+                    .attr("class", "catText")
+                    .attr("x", (this.width-this.margin.left)/2)
+                    .attr("y", 0)
+                    .style("text-anchor", "middle")
+                    .style("font-size", 20)
+                    .text(new VideoCategory(d.key));
+            })
+            .on("mouseout", () => {
+                 d3.selectAll(".catText").remove();
             });
         this.svg.append("text")
             .attr("transform", "translate(" + (-this.margin.left / 1.4) + "," + this.height / 2 + ")rotate(-90)")
@@ -128,6 +142,13 @@ class StackedAreaChart {
             .attr("transform", "translate(" + (this.width / 2) + "," + (this.height + this.margin.bottom / 3) + ")")
             .style("text-anchor", "middle")
             .text("Time");
+        this.svg.append("text")
+            .attr("class", "countryTitle")
+            .attr("x", (this.width-this.margin.left)/2)
+            .attr("y", -this.margin.top/2)
+            .style("text-anchor", "middle")
+            .style("font-size", 28)
+            .text(this.country);
     }
 
     // Show breakdown for the top /numSlices/ videos and other.
