@@ -173,7 +173,7 @@ class StackedAreaChart {
         var tip = d3.tip()
             .attr("class", tipClass)
             .html(function(d, i) {
-                if (i >= numSlices) {
+                if (i >= numSlices || i >= filteredVideos.length) {
                     return `<h2>Other videos</h2><br/>
                             <h4>${(otherViews / point.totalViews * 100).toFixed(1)}% of the total trending views.`;
                 }
