@@ -3,7 +3,7 @@ class StackedAreaChart {
         this.dataProvider = dataProvider;
         this.margin = {
             top: 50,
-            right: 60,
+            right: 300,
             bottom: 100,
             left: 100
         };
@@ -17,10 +17,9 @@ class StackedAreaChart {
             .attr("width", this.width + this.margin.left + this.margin.right)
             .attr("height", this.height + this.margin.bottom + this.margin.top);
 
-        this.tooltipId = "tooltip";
-        svg.append("g")
-            .attr("id", this.tooltipId)
-            .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+        this.breakdownRadius = this.margin.right / 2;
+        this.breakdown = svg.append("g")
+            .attr("transform", "translate(" + (this.margin.left + this.width + this.breakdownRadius) + "," + (this.margin.top + this.breakdownRadius) + ")");
 
         this.svg = svg.append("g")
             .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -68,21 +67,13 @@ class StackedAreaChart {
     // Use this.displayData to draw.
     updateVis() {
         let self = this;
-        d3.selectAll(".d3-tip")
-            .remove();
-        var tip = d3.tip()
-            .attr('class', 'd3-tip')
-            .html(function(d, i) {
-                return self.tooltipRender(d, i);
-            });
-
         this.svg.selectAll("*")
             .remove();
         var stackedData = this.stackedData();
         var xScale = d3.scaleTime()
             .domain(d3.extent(this.displayData, d => d.datetime))
             .range([0, this.width]);
-        var numericXScale = d3.scaleLinear()
+        var screenXToDataScale = d3.scaleLinear()
             .domain([0, this.width])
             .range([0, this.displayData.length - 1]);
         var yScale = d3.scaleLinear()
@@ -126,9 +117,8 @@ class StackedAreaChart {
                 return area(d);
             })
             .on("click", d => {
-                tip.direction("se");
-                tip.offset([0, this.width + 20]);
-                tip.show(d, Math.floor(numericXScale(d3.event.x)), document.getElementById(this.tooltipId));
+                var point = this.displayData[Math.floor(screenXToDataScale(d3.event.x))];
+                this.updateBreakdown(point, 5);
             });
         this.svg.append("text")
             .attr("transform", "translate(" + (-this.margin.left / 1.4) + "," + this.height / 2 + ")rotate(-90)")
@@ -138,34 +128,52 @@ class StackedAreaChart {
             .attr("transform", "translate(" + (this.width / 2) + "," + (this.height + this.margin.bottom / 3) + ")")
             .style("text-anchor", "middle")
             .text("Time");
-        this.svg.call(tip);
     }
 
-    tooltipRender(d, chartIndex) {
-        var categories = new Array(VideoCategory.getAllCategories()
-                .length)
-            .fill([]);
-        console.log(categories.length)
-        let videos = this.displayData[chartIndex].videos;
-        for (let j = 0; j < videos.length; j++) {
-            categories[videos[j].category.id].push({
-                "author": videos[j].author,
-                "link": videos[j].link,
-                "views": videos[j].views,
-                "title": videos[j].title
+    // Show breakdown for the top /numSlices/ videos and other.
+    updateBreakdown(point, numSlices) {
+        var topVideos = point.videos.sort((v1, v2) => v2.views - v1.views)
+            .slice(0, numSlices);
+
+        var topViews = topVideos.map(v => v.views);
+        var otherViews = point.totalViews - topVideos.reduce((accum, v) => accum + v.views, 0);
+
+        var arcs = this.breakdown.selectAll("arc")
+            .data(d3.pie()(topViews.concat(otherViews)));
+        var colorScale = d3.scaleOrdinal(d3.schemeCategory20c);
+
+        var tip = d3.tip()
+            .attr("class", "d3-tip")
+            .html(function(d, i) {
+                if (i >= numSlices) {
+                    return `<h2>Other videos</h2><br/>
+                            <h4>${(otherViews / point.totalViews * 100).toFixed(1)}% of the total trending views.`;
+                }
+                var video = topVideos[i];
+                return `<h2><a href="https://youtube.com/watch?v=${video.link}">${video.title}</a></h2><br/>
+                        <h4>${(video.views / point.totalViews * 100).toFixed(1)}% of the total trending views.`;
+            });
+
+        this.breakdown.call(tip);
+
+        arcs.enter()
+            .append("g")
+            .attr("class", "arc")
+            .append("path")
+            .merge(arcs)
+            .attr("fill", (d, i) => colorScale(i))
+            .attr("d", d3.arc()
+                .innerRadius(0)
+                .outerRadius(this.breakdownRadius))
+            .on("mouseover", (d, i) => {
+                tip.hide();
+                tip.direction("se");
+                tip.offset([-10, -10]);
+                tip.show(d, i);
             })
-        }
-        let s = "";
-        let currentCat = categories[d.key];
-        currentCat.sort((a, b) => {
-            return b.views - a.views
-        });
-        for (let i = 0; i < 5; i++) {
-            s += "<li>Author: " + String(currentCat[i]['author']) + "<br>";
-            s += 'Title: <a href="https://www.youtube.com/watch?v=' + currentCat[i]['link'] + '">' + currentCat[i]['title'] + "</a><br>";
-            s += "Views: " + currentCat[i]['views'] + "</li>";
-        }
-        return "<h2>" + String(new VideoCategory(+d.key)) + "</h2><ul>" + s + "</ul>";
+
+        arcs.exit()
+            .remove();
     }
 
 }
