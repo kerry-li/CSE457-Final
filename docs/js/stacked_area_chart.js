@@ -165,7 +165,7 @@ class StackedAreaChart {
             .attr("d", d3.arc()
                 .innerRadius(0)
                 .outerRadius(this.breakdownRadius))
-            .on("mouseover", (d, i) => {
+            .on("click", (d, i) => {
                 tip.hide();
                 tip.direction("se");
                 tip.offset([-10, -10]);
