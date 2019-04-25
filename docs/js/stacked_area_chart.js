@@ -122,7 +122,7 @@ class StackedAreaChart {
             })
             .on("click", d => {
                 var point = this.displayData[Math.floor(screenXToDataScale(d3.event.x))];
-                this.updateBreakdown(point, 5);
+                this.updateBreakdown(point, 5, new VideoCategory(d.key));
             })
             .on("mouseover", d => {
                 d3.selectAll(".catText")
@@ -157,8 +157,9 @@ class StackedAreaChart {
     }
 
     // Show breakdown for the top /numSlices/ videos and other.
-    updateBreakdown(point, numSlices) {
-        var topVideos = point.videos.sort((v1, v2) => v2.views - v1.views)
+    updateBreakdown(point, numSlices, category) {
+        var filteredVideos = point.videos.filter(v => v.category.equals(category));
+        var topVideos = filteredVideos.sort((v1, v2) => v2.views - v1.views)
             .slice(0, numSlices);
 
         var topViews = topVideos.map(v => v.views);
@@ -210,6 +211,15 @@ class StackedAreaChart {
 
         arcs.exit()
             .remove();
+
+        var title = this.breakdown.selectAll(".breakdown-title")
+            .data([category]);
+
+        title.enter()
+            .append("text")
+            .attr("class", "breakdown-title")
+            .merge(title)
+            .text(category.toString());
     }
 
 }
